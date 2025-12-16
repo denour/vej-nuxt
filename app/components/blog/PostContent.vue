@@ -7,6 +7,25 @@ interface PostContentProps {
 }
 
 const props = defineProps<PostContentProps>();
+
+const { public: publicConfig } = useRuntimeConfig();
+
+function originFromApiBase(apiBase: string) {
+  // apiBase puede venir como "https://dominio.com/api/v1"
+  // queremos "https://dominio.com"
+  try {
+    return new URL(apiBase).origin;
+  } catch {
+    // fallback razonable si apiBase viene raro (sin protocolo)
+    return (apiBase || '').replace(/\/+$/, '').replace(/\/api\/v\d+$/, '');
+  }
+}
+
+function joinUrl(base: string, path: string) {
+  const b = (base || '').replace(/\/$/, '');
+  const p = (path || '').startsWith('/') ? (path || '') : `/${path || ''}`;
+  return `${b}${p}`;
+}
 </script>
 
 <template>
@@ -34,7 +53,7 @@ const props = defineProps<PostContentProps>();
       <!-- Image -->
       <figure v-else-if="block.type === 'image'" class="my-10">
         <img
-            :src="`http://localhost/storage/${block.data.url}`"
+            :src="joinUrl(originFromApiBase(publicConfig.apiBase), `/storage/${block.data.url}`)"
             :alt="block.data.caption || ''"
             class="w-full rounded-2xl shadow-lg"
         />

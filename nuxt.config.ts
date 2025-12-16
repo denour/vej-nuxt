@@ -13,6 +13,9 @@ export default defineNuxtConfig({
     public: {
       // Base URL for Laravel API (can include /api/v1)
       apiBase: process.env.API_BASE || 'http://localhost/api/v1',
+
+      // Base URL for serving files from Laravel (e.g. /storage)
+      storageBase: process.env.STORAGE_BASE || 'http://localhost',
       // Optional contact endpoint path (relative to apiBase)
       contactEndpoint: process.env.CONTACT_ENDPOINT || '/contact',
       // Captcha provider and site key (client-side)
