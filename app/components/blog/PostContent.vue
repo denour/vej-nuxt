@@ -53,7 +53,7 @@ function joinUrl(base: string, path: string) {
       <!-- Image -->
       <figure v-else-if="block.type === 'image'" class="my-10">
         <img
-            :src="joinUrl(originFromApiBase(publicConfig.apiBase), `/storage/${block.data.url}`)"
+            :src="`${block.data.url}`"
             :alt="block.data.caption || ''"
             class="w-full rounded-2xl shadow-lg"
         />

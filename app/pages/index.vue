@@ -1,4 +1,7 @@
 <script setup lang="ts">
+useSeoMeta({
+  title: 'Inicio | Vida En el Jardin',
+})
 import {onMounted} from 'vue'
 import { Sprout } from 'lucide-vue-next'
 import Hero from "~/components/common/Hero.vue";

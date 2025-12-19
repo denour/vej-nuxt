@@ -26,10 +26,7 @@ onMounted(async () => {
 })
 
 useSeoMeta({
-  title: 'Blog | Vida en el Jardín',
-  description: 'Descubre consejos, guías y secretos para el cuidado de tus plantas. Aprende de expertos y convierte tu espacio en un jardín próspero.',
-  ogTitle: 'Blog | Vida en el Jardín',
-  ogDescription: 'Consejos, guías y secretos para el cuidado de tus plantas.',
+  title: 'Blog | Vida En el Jardin',
 })
 </script>
 

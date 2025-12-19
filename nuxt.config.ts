@@ -2,6 +2,14 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  app: {
+    head: {
+      title: 'Vida En el Jardin',
+      meta: [
+        { name: 'description', content: 'Tu guía y tienda de plantas' }
+      ]
+    }
+  },
   modules: [
       '@nuxtjs/tailwindcss',
       '@pinia/nuxt',
