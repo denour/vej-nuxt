@@ -10,7 +10,11 @@ const selectedType = ref('Todas')
 const searchQuery = ref('')
 
 const difficulties = ['Todas', 'Fácil', 'Moderado', 'Avanzado']
-const types = ['Todas', 'Tropical', 'Suculenta', 'Cactus', 'Helecho', 'Aromática']
+const sunlightLevels = ['Todas', 'Baja', 'Media', 'Alta']
+const wateringLevels = ['Todas', 'Bajo', 'Medio', 'Alto']
+
+const selectedSunlight = ref('Todas')
+const selectedWatering = ref('Todas')
 
 const speciesData = useSpeciesStore();
 
@@ -25,20 +29,36 @@ const difficultyMap: Record<string, string> = {
   'Avanzado': 'hard',
 }
 
+const sunlightMap: Record<string, string> = {
+  'Baja': 'low',
+  'Media': 'medium',
+  'Alta': 'high',
+}
+
+const wateringMap: Record<string, string> = {
+  'Bajo': 'low',
+  'Medio': 'medium',
+  'Alto': 'high',
+}
+
 const filteredSpecies = computed(() => {
   return speciesData.species.filter(specie => {
     const matchesDifficulty =
       selectedDifficulty.value === 'Todas' || specie.careLevel === difficultyMap[selectedDifficulty.value]
 
-    // Tipo no está modelado; mantenemos filtro visual sin afectar resultados
-    const matchesType = true
+    const matchesSunlight =
+      selectedSunlight.value === 'Todas' || specie.sunlight === sunlightMap[selectedSunlight.value]
+
+    const matchesWatering =
+      selectedWatering.value === 'Todas' || specie.watering === wateringMap[selectedWatering.value]
 
     const search = searchQuery.value.toLowerCase()
     const matchesSearch =
       (specie.commonName || '').toLowerCase().includes(search) ||
-      (specie.scientificName || '').toLowerCase().includes(search)
+      (specie.scientificName || '').toLowerCase().includes(search) ||
+      (specie.family || '').toLowerCase().includes(search)
 
-    return matchesDifficulty && matchesType && matchesSearch
+    return matchesDifficulty && matchesSunlight && matchesWatering && matchesSearch
   })
 })
 
@@ -141,23 +161,44 @@ useSeoMeta({
             </div>
           </div>
 
-          <!-- Type Filter -->
+          <!-- Sunlight Filter -->
           <div class="flex items-center gap-4 overflow-x-auto">
             <div class="flex items-center gap-2 text-gray-600 flex-shrink-0">
-              <span class="text-sm">Tipo:</span>
+              <span class="text-sm">Luz:</span>
             </div>
 
             <div class="flex gap-2">
               <button
-                  v-for="type in types"
-                  :key="type"
-                  @click="selectedType = type"
+                  v-for="level in sunlightLevels"
+                  :key="level"
+                  @click="selectedSunlight = level"
                   class="px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap"
-                  :class="selectedType === type
-              ? 'bg-emerald-600 text-white shadow-md'
+                  :class="selectedSunlight === level
+              ? 'bg-yellow-600 text-white shadow-md'
               : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
               >
-                {{ type }}
+                {{ level }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Watering Filter -->
+          <div class="flex items-center gap-4 overflow-x-auto">
+            <div class="flex items-center gap-2 text-gray-600 flex-shrink-0">
+              <span class="text-sm">Riego:</span>
+            </div>
+
+            <div class="flex gap-2">
+              <button
+                  v-for="level in wateringLevels"
+                  :key="level"
+                  @click="selectedWatering = level"
+                  class="px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap"
+                  :class="selectedWatering === level
+              ? 'bg-blue-600 text-white shadow-md'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
+              >
+                {{ level }}
               </button>
             </div>
           </div>

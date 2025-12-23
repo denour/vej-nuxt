@@ -11,6 +11,7 @@ import TableOfContents from "~/components/blog/TableOfContents.vue"
 import PostContent from "~/components/blog/PostContent.vue"
 import AuthorBio from "~/components/blog/AuthorBio.vue"
 import RelatedPosts from "~/components/blog/RelatedPosts.vue"
+import SocialShare from "~/components/blog/SocialShare.vue"
 
 const route = useRoute()
 const postsStore = usePostsStore()
@@ -77,6 +78,15 @@ const handleSubscribe = async () => {
       <div class="lg:col-span-3 order-1 lg:order-2">
         <article class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-8">
           <PostContent v-if="post" :content="post.content" />
+
+          <!-- Botones de compartir -->
+          <div class="mt-12 pt-8 border-t border-gray-200">
+            <SocialShare
+              v-if="post"
+              :title="post.title"
+              :url="`${$config.public.siteUrl || 'https://vidaeneljardin.com'}/blog/${slug}`"
+            />
+          </div>
         </article>
 
         <AuthorBio

@@ -1,33 +1,76 @@
 <script setup lang="ts">
-import { Droplets, Sun, Thermometer, Info } from "lucide-vue-next";
+import { Droplets, Sun, TrendingUp, Skull, Info } from "lucide-vue-next";
 import { onImgError } from '~~/utils/image'
+import type { Species } from '~~/models/Species'
 
-const props = defineProps({
-  species: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  species: Species
+}>();
 
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case "Fácil":
+const getDifficultyColor = (careLevel?: string) => {
+  switch (careLevel) {
+    case "easy":
       return "bg-green-100 text-green-700";
-    case "Moderado":
+    case "medium":
       return "bg-yellow-100 text-yellow-700";
-    case "Avanzado":
+    case "hard":
       return "bg-orange-100 text-orange-700";
     default:
-      return "";
+      return "bg-gray-100 text-gray-700";
   }
 };
 
-const getWaterLevel = (level: string) => {
-  return level === "Baja" ? 1 : level === "Media" ? 2 : 3;
+const getDifficultyLabel = (careLevel?: string) => {
+  switch (careLevel) {
+    case "easy":
+      return "Fácil";
+    case "medium":
+      return "Moderado";
+    case "hard":
+      return "Avanzado";
+    default:
+      return "N/A";
+  }
 };
 
-const getLightLevel = (level: string) => {
-  return level === "Baja" ? 1 : level === "Media" ? 2 : 3;
+const getWaterLevel = (level?: string) => {
+  return level === "low" ? 1 : level === "medium" ? 2 : level === "high" ? 3 : 0;
+};
+
+const getLightLevel = (level?: string) => {
+  return level === "low" ? 1 : level === "medium" ? 2 : level === "high" ? 3 : 0;
+};
+
+const getGrowthRateLabel = (rate?: string) => {
+  switch (rate) {
+    case "slow":
+      return "Lento";
+    case "medium":
+      return "Moderado";
+    case "fast":
+      return "Rápido";
+    default:
+      return "N/A";
+  }
+};
+
+const getToxicityLabel = (toxicity?: string) => {
+  switch (toxicity) {
+    case "none":
+      return "No tóxica";
+    case "pets":
+      return "Tóxica para mascotas";
+    case "humans":
+      return "Tóxica para humanos";
+    case "both":
+      return "Tóxica";
+    default:
+      return null;
+  }
+};
+
+const getToxicityColor = (toxicity?: string) => {
+  return toxicity && toxicity !== "none" ? "text-red-500" : "text-green-500";
 };
 </script>
 
@@ -37,17 +80,25 @@ const getLightLevel = (level: string) => {
     <div class="relative h-64 bg-gradient-to-br from-gray-100 to-green-50 overflow-hidden">
       <img
           :src="species.image"
-          :alt="species.name"
+          :alt="species.commonName"
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           @error="onImgError"
       />
 
-      <div class="absolute top-4 right-4">
+      <div class="absolute top-4 right-4 flex flex-col gap-2">
         <span
-            class="px-3 py-1 rounded-full text-xs shadow-md"
-            :class="getDifficultyColor(species.difficulty)"
+            class="px-3 py-1 rounded-full text-xs shadow-md backdrop-blur-sm"
+            :class="getDifficultyColor(species.careLevel)"
         >
-          {{ species.difficulty }}
+          {{ getDifficultyLabel(species.careLevel) }}
+        </span>
+        <span
+            v-if="getToxicityLabel(species.toxicity)"
+            class="px-3 py-1 rounded-full text-xs shadow-md backdrop-blur-sm bg-white/90 flex items-center gap-1"
+            :class="getToxicityColor(species.toxicity)"
+        >
+          <Skull class="w-3 h-3" />
+          {{ getToxicityLabel(species.toxicity) }}
         </span>
       </div>
     </div>
@@ -56,14 +107,14 @@ const getLightLevel = (level: string) => {
     <div class="p-6">
       <div class="mb-3">
         <h3 class="text-xl text-gray-800 mb-1">
-          {{ species.name }}
+          {{ species.commonName }}
         </h3>
         <p class="text-sm text-gray-500 italic">{{ species.scientificName }}</p>
-        <p class="text-xs text-gray-400 mt-1">Familia: {{ species.family }}</p>
+        <p v-if="species.family" class="text-xs text-gray-400 mt-1">Familia: {{ species.family }}</p>
       </div>
 
       <p class="text-sm text-gray-600 mb-4 line-clamp-2">
-        {{ species.description }}
+        {{ species.description || 'Sin descripción disponible' }}
       </p>
 
       <!-- Care Requirements -->
@@ -80,7 +131,7 @@ const getLightLevel = (level: string) => {
                 v-for="n in 3"
                 :key="n"
                 class="w-2 h-2 rounded-full"
-                :class="n <= getWaterLevel(species.waterNeeds) ? 'bg-blue-500' : 'bg-gray-200'"
+                :class="n <= getWaterLevel(species.watering) ? 'bg-blue-500' : 'bg-gray-200'"
             />
           </div>
         </div>
@@ -97,18 +148,18 @@ const getLightLevel = (level: string) => {
                 v-for="n in 3"
                 :key="n"
                 class="w-2 h-2 rounded-full"
-                :class="n <= getLightLevel(species.lightNeeds) ? 'bg-yellow-500' : 'bg-gray-200'"
+                :class="n <= getLightLevel(species.sunlight) ? 'bg-yellow-500' : 'bg-gray-200'"
             />
           </div>
         </div>
 
-        <!-- Temperature -->
-        <div class="flex items-center justify-between">
+        <!-- Growth Rate -->
+        <div v-if="species.growthRate" class="flex items-center justify-between">
           <div class="flex items-center gap-2 text-sm text-gray-600">
-            <Thermometer class="w-4 h-4 text-red-500" />
-            <span>Temperatura:</span>
+            <TrendingUp class="w-4 h-4 text-green-500" />
+            <span>Crecimiento:</span>
           </div>
-          <span class="text-sm text-gray-700">{{ species.temperature }}</span>
+          <span class="text-sm text-gray-700">{{ getGrowthRateLabel(species.growthRate) }}</span>
         </div>
       </div>
 

@@ -1,17 +1,20 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { ArrowUpIcon, MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/vue/24/outline'
+import { ArrowUpIcon, MagnifyingGlassIcon, ShoppingCartIcon, Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
 
 export default defineComponent({
   name: 'Navigation',
   components: {
     ArrowUpIcon,
     MagnifyingGlassIcon,
-    ShoppingCartIcon
+    ShoppingCartIcon,
+    Bars3Icon,
+    XMarkIcon
   },
   data() {
     return {
       cartCount: 3,
+      mobileMenuOpen: false,
       navigationLinks: [
         { name: 'Inicio', path: '/' },
         { name: 'Blog', path: '/blog' },
@@ -20,6 +23,14 @@ export default defineComponent({
         // { name: 'Consejos', path: '/tips' },
         { name: 'Contacto', path: '/contact' }
       ]
+    }
+  },
+  methods: {
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen
+    },
+    closeMobileMenu() {
+      this.mobileMenuOpen = false
     }
   }
 })
@@ -39,7 +50,7 @@ export default defineComponent({
           </span>
         </div>
 
-        <!-- Navigation Links -->
+        <!-- Navigation Links (Desktop) -->
         <div class="hidden md:flex items-center gap-8">
           <NuxtLink
             v-for="link in navigationLinks"
@@ -51,18 +62,33 @@ export default defineComponent({
           </NuxtLink>
         </div>
 
-        <!-- Icons -->
-<!--        <div class="flex items-center gap-4">-->
-<!--          <button class="text-gray-600 hover:text-green-600 transition-colors">-->
-<!--            <MagnifyingGlassIcon class="w-5 h-5" />-->
-<!--          </button>-->
-<!--          <button class="relative text-gray-600 hover:text-green-600 transition-colors">-->
-<!--            <ShoppingCartIcon class="w-5 h-5" />-->
-<!--            <span class="absolute -top-2 -right-2 bg-green-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">-->
-<!--              {{ cartCount }}-->
-<!--            </span>-->
-<!--          </button>-->
-<!--        </div>-->
+        <!-- Mobile Menu Button -->
+        <button
+          @click="toggleMobileMenu"
+          class="md:hidden text-gray-600 hover:text-green-600 transition-colors p-2"
+          aria-label="Toggle menu"
+        >
+          <Bars3Icon v-if="!mobileMenuOpen" class="w-6 h-6" />
+          <XMarkIcon v-else class="w-6 h-6" />
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        v-if="mobileMenuOpen"
+        class="md:hidden mt-4 pb-4 border-t border-green-100"
+      >
+        <div class="flex flex-col gap-4 pt-4">
+          <NuxtLink
+            v-for="link in navigationLinks"
+            :key="link.path"
+            :to="link.path"
+            @click="closeMobileMenu"
+            class="text-gray-700 hover:text-green-600 transition-colors py-2 px-4 hover:bg-green-50 rounded-lg"
+          >
+            {{ link.name }}
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </nav>
