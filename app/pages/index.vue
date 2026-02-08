@@ -1,6 +1,10 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Inicio | Vida En el Jardin',
+  title: 'Tu Guía de Plantas y Jardinería',
+  description: 'Vida en el Jardín - Tu tienda y guía completa de plantas. Encuentra plantas de calidad, consejos de cuidado y todo para tu jardín.',
+  ogTitle: 'Vida En el Jardín - Tu Guía de Plantas',
+  ogDescription: 'Tienda online de plantas y guías de jardinería. Plantas de calidad, consejos expertos y envío a toda México.',
+  ogType: 'website',
 })
 import {onMounted} from 'vue'
 import { Sprout } from 'lucide-vue-next'

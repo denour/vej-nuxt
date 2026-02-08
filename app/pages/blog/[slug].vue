@@ -35,12 +35,32 @@ const sanitizedPost = computed(() => {
   ) as Partial<BlogPost>
 })
 
+const config = useRuntimeConfig()
+const canonicalUrl = computed(() => `${config.public.siteUrl}/blog/${slug}`)
+
 useSeoMeta({
-  title: () => post.value?.title || 'Artículo | Vida en el Jardín',
-  description: () => post.value?.excerpt || 'Artículo del blog',
+  title: () => post.value?.title || 'Artículo',
+  description: () => post.value?.excerpt || 'Artículo del blog de jardinería',
+  // Open Graph
+  ogType: 'article',
   ogTitle: () => post.value?.title || 'Artículo | Vida en el Jardín',
   ogDescription: () => post.value?.excerpt || 'Artículo del blog',
-  ogImage: () => post.value?.coverImage || '/images/placeholder.svg',
+  ogImage: () => post.value?.coverImage || '/images/og-default.jpg',
+  ogUrl: () => canonicalUrl.value,
+  // Twitter
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => post.value?.title || 'Artículo | Vida en el Jardín',
+  twitterDescription: () => post.value?.excerpt || 'Artículo del blog',
+  twitterImage: () => post.value?.coverImage || '/images/og-default.jpg',
+  // Article specific
+  articlePublishedTime: () => post.value?.publishedAt,
+  articleAuthor: () => post.value?.author?.name,
+  articleSection: () => post.value?.category || 'Jardinería',
+})
+
+// Canonical URL
+useHead({
+  link: [{ rel: 'canonical', href: canonicalUrl.value }],
 })
 
 // Newsletter form in-page
