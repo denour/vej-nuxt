@@ -1,140 +1,115 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import ProductFilters from "~/components/shop/ProductFilters.vue";
-import ProductCard from "~/components/shop/ProductCard.vue";
-import ProductSort from "~/components/shop/ProductSort.vue";
-import ProductListItem from "~/components/shop/ProductListItem.vue";
-import {useProductsStore} from "~~/stores/Product";
+import { onMounted } from 'vue'
+import { ArrowUpRight, Package, ShieldCheck, Truck } from 'lucide-vue-next'
+import { useProductsStore } from '~~/stores/Product'
+import PageHero from '~/components/common/PageHero.vue'
+
+useSeoMeta({
+  title: 'Tienda — Vida en el Jardín',
+  description: 'Plantas curadas, listas para su nuevo hogar. Envío en empaque botánico con garantía de llegada.',
+})
 
 const products = useProductsStore()
 
-const viewMode = ref('grid')
-const currentPage = ref(1)
+onMounted(async () => {
+  try { await (products as any).fetchProducts?.() } catch (e) { /* graceful */ }
+})
 
-const setViewMode = (mode:any) => {
-  viewMode.value = mode;
-}
-
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--
-}
-
-const nextPage = () => {
-  currentPage.value++
-}
+const features = [
+  { icon: Package, title: 'Empaque botánico', body: 'Diseñado para que lleguen vivas y firmes.' },
+  { icon: Truck, title: 'Envío 24-48h', body: 'En CDMX y zona metropolitana.' },
+  { icon: ShieldCheck, title: 'Garantía 30 días', body: 'Reposición sin preguntas si llega dañada.' },
+]
 </script>
 
 <template>
-    <!-- Products Section -->
-    <section class="max-w-7xl mx-auto px-6 py-12">
-      <div class="grid lg:grid-cols-4 gap-8">
+  <main class="relative min-h-screen">
+    <PageHero
+      eyebrow="Tienda"
+      title="Plantas listas"
+      italic="para su"
+      trailing="nuevo hogar."
+      description="Curadas a mano, empacadas con cuidado y enviadas con garantía de llegada. Cada una viene con su ficha de cuidado."
+    />
 
-        <!-- Filters Sidebar -->
-        <div class="lg:col-span-1">
-          <ProductFilters />
-        </div>
-
-        <!-- Products Grid/List -->
-        <div class="lg:col-span-3">
-
-          <ProductSort :total-products="products.products.length"/>
-
-          <div v-if="viewMode !== 'grid'">
-            <ProductCard
-                v-for="product in products.products"
-                :key="product.id"
-                v-bind="product"
-            />
+    <!-- Trust strip -->
+    <section class="border-y border-line">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12 py-10 grid sm:grid-cols-3 gap-8">
+        <div
+          v-for="(f, i) in features"
+          :key="f.title"
+          v-motion
+          :initial="{ opacity: 0, y: 20 }"
+          :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: i * 100 } }"
+          class="flex items-center gap-5"
+        >
+          <div class="w-12 h-12 rounded-full border border-line flex items-center justify-center text-terra flex-shrink-0">
+            <component :is="f.icon" class="w-5 h-5" />
           </div>
-
-          <div v-else>
-            <ProductListItem
-                v-for="product in products.products"
-                :key="product.id"
-                v-bind="product"
-            />
+          <div>
+            <div class="font-display text-cream text-xl tracking-tighter">{{ f.title }}</div>
+            <div class="text-cream-60 text-sm">{{ f.body }}</div>
           </div>
-
-          <!-- Pagination -->
-          <div class="flex items-center justify-center gap-2">
-            <button
-                class="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                :disabled="currentPage === 1"
-                @click="prevPage"
-            >
-              <ChevronLeft class="w-5 h-5 text-gray-600" />
-            </button>
-
-            <button class="px-4 py-2 bg-green-600 text-white rounded-lg">
-              1
-            </button>
-
-            <button class="px-4 py-2 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors">
-              2
-            </button>
-
-            <button class="px-4 py-2 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors">
-              3
-            </button>
-
-            <span class="px-2 text-gray-400">...</span>
-
-            <button class="px-4 py-2 hover:bg-gray-50 text-gray-700 rounded-lg transition-colors">
-              4
-            </button>
-
-            <button
-                class="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors"
-                @click="nextPage"
-            >
-              <ChevronRight class="w-5 h-5 text-gray-600" />
-            </button>
-          </div>
-
         </div>
       </div>
     </section>
 
-    <!-- Guarantee Section -->
-    <section class="bg-gradient-to-br from-green-600 to-emerald-600 py-16">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid md:grid-cols-3 gap-8 text-white text-center">
-
-          <div>
-            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <h3 class="text-xl mb-2">Garantía de Calidad</h3>
-            <p class="text-green-100">Todas nuestras plantas están garantizadas por 30 días</p>
-          </div>
-
-          <div>
-            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100
-                4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl mb-2">Envío Seguro</h3>
-            <p class="text-green-100">Empaque especial para que lleguen en perfecto estado</p>
-          </div>
-
-          <div>
-            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536
-                3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl mb-2">Soporte Experto</h3>
-            <p class="text-green-100">Guías y consejos personalizados para cada planta</p>
-          </div>
-
+    <!-- Products grid (or empty state) -->
+    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto py-20">
+      <div v-if="!products.products || products.products.length === 0" class="py-20 text-center">
+        <div class="font-display text-cream text-5xl mb-6 tracking-tighter">
+          Tienda
+          <em class="font-display-italic text-terra">en germinación</em>.
+        </div>
+        <p class="text-cream-60 max-w-md mx-auto leading-relaxed">
+          Estamos preparando las primeras especies para venta. Mientras tanto, puedes explorar el
+          <NuxtLink to="/species" class="text-cream underline decoration-terra underline-offset-4 hover:text-terra transition-colors">catálogo botánico</NuxtLink>
+          y suscribirte para enterarte cuando abramos.
+        </p>
+        <div class="mt-12 flex flex-wrap items-center justify-center gap-4">
+          <NuxtLink
+            to="/species"
+            class="inline-flex items-center gap-3 px-7 py-4 bg-cream text-ink rounded-full text-sm font-medium hover:bg-terra transition-colors duration-500 shine-on-hover"
+          >
+            Ver especies
+            <ArrowUpRight class="w-4 h-4" />
+          </NuxtLink>
+          <NuxtLink
+            to="/contact"
+            class="inline-flex items-center gap-3 px-7 py-4 border border-cream/30 text-cream rounded-full text-sm font-medium hover:border-cream hover:bg-cream/5 transition-all"
+          >
+            Pedir alerta
+          </NuxtLink>
         </div>
       </div>
+
+      <div v-else class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <article
+          v-for="(product, idx) in products.products"
+          :key="(product as any).id"
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: (idx % 8) * 60 } }"
+          class="group relative overflow-hidden rounded-2xl bg-ink-card border border-line cursor-pointer transition-all duration-500 hover:border-cream/30"
+        >
+          <div class="relative aspect-[4/5] overflow-hidden">
+            <img
+              :src="(product as any).image"
+              :alt="(product as any).name"
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/80 via-transparent to-transparent" />
+            <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-cream/10 backdrop-blur border border-cream/20 flex items-center justify-center transition-all duration-500 group-hover:bg-terra group-hover:border-terra">
+              <ArrowUpRight class="w-4 h-4 text-cream transition-transform duration-500 group-hover:rotate-45 group-hover:text-ink" />
+            </div>
+          </div>
+          <div class="p-5 flex items-baseline justify-between">
+            <h3 class="font-display text-cream text-xl tracking-tighter">{{ (product as any).name }}</h3>
+            <span class="text-terra font-display text-lg">${{ (product as any).price }}</span>
+          </div>
+        </article>
+      </div>
     </section>
+  </main>
 </template>
