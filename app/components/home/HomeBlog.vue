@@ -1,30 +1,19 @@
 <script setup lang="ts">
-const posts = [
-  {
-    category: 'Cuidados',
-    title: 'El arte de regar sin matar',
-    excerpt: 'Por qué la mitad de tus plantas mueren ahogadas, no de sed. Guía práctica para leer la humedad del sustrato.',
-    readTime: '6 min',
-    date: 'Abr 2026',
-    image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80',
-  },
-  {
-    category: 'Especies',
-    title: 'Monstera: anatomía de una rebelde',
-    excerpt: 'Por qué le salen agujeros, qué significan, y cómo provocar fenestración temprana en plantas jóvenes.',
-    readTime: '8 min',
-    date: 'Abr 2026',
-    image: 'https://images.unsplash.com/photo-1614594975525-e45190c55d0b?w=900&q=80',
-  },
-  {
-    category: 'Diseño',
-    title: 'Componer con plantas: la regla del trío',
-    excerpt: 'Una técnica que floristas usan para arreglar cualquier rincón verde. Tres alturas, tres texturas, una conversación.',
-    readTime: '5 min',
-    date: 'Mar 2026',
-    image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?w=900&q=80',
-  },
-]
+import { computed, onMounted } from 'vue'
+import { usePostsStore } from '~~/stores/BlogPost'
+
+const postsStore = usePostsStore()
+
+onMounted(async () => {
+  try { await postsStore.fetchPosts() } catch (e) { /* falls back to mocks */ }
+})
+
+const posts = computed(() => postsStore.posts.slice(0, 3))
+
+const formatDate = (d?: string) => {
+  if (!d) return ''
+  return new Date(d).toLocaleDateString('es-MX', { month: 'short', year: 'numeric' })
+}
 </script>
 
 <template>
@@ -46,11 +35,13 @@ const posts = [
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+    <div v-if="posts.length === 0" class="text-cream-40 italic">Cargando lecturas...</div>
+
+    <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
       <NuxtLink
         v-for="(post, idx) in posts"
-        :key="post.title"
-        to="/blog"
+        :key="post.id"
+        :to="`/blog/${(post as any).slug}`"
         v-motion
         :initial="{ opacity: 0, y: 40 }"
         :visible-once="{ opacity: 1, y: 0, transition: { duration: 700, delay: idx * 120 } }"
@@ -58,7 +49,7 @@ const posts = [
       >
         <div class="relative aspect-[4/5] rounded-2xl overflow-hidden mb-6 bg-ink-card">
           <img
-            :src="post.image"
+            :src="(post as any).image"
             :alt="post.title"
             loading="lazy"
             class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
@@ -66,15 +57,15 @@ const posts = [
           <div class="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
           <div class="absolute top-5 left-5">
             <span class="px-3 py-1.5 bg-cream/15 backdrop-blur border border-cream/20 rounded-full text-cream text-[11px] tracking-[0.2em] uppercase">
-              {{ post.category }}
+              {{ (post as any).category }}
             </span>
           </div>
         </div>
 
         <div class="flex items-center gap-3 text-cream-40 text-xs tracking-wider uppercase mb-3">
-          <span>{{ post.date }}</span>
+          <span>{{ formatDate((post as any).publishedAt) }}</span>
           <span class="text-terra">·</span>
-          <span>{{ post.readTime }}</span>
+          <span>{{ (post as any).readTime }}</span>
         </div>
 
         <h3 class="font-display text-cream text-3xl lg:text-4xl tracking-tighter leading-[1.05] group-hover:text-terra transition-colors duration-500">

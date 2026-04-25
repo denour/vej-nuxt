@@ -1,212 +1,184 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { MagnifyingGlassIcon as Search } from '@heroicons/vue/24/outline'
-import {usePostsStore} from "~~/stores/BlogPost";
-import BlogCard from "~/components/blog/BlogCard.vue";
-import { useSeoMeta } from '#imports'
-import NewsletterInline from '~/components/common/NewsletterInline.vue'
+import { Search, X } from 'lucide-vue-next'
+import { usePostsStore } from "~~/stores/BlogPost"
 
-const posts = usePostsStore();
-const selectedCategory = ref<string | null>(null)
-const categories = ref<string[]>([])
-const searchQuery = ref("")
-const featured = computed(() => posts.featuredPost)
-const listPosts = computed(() => posts.postsWithoutFeatured)
+useSeoMeta({
+  title: 'Blog — Vida en el Jardín',
+  description: 'Ensayos botánicos, guías de cuidado y notas para cultivadores curiosos. Escrito por jardineros, no por algoritmos.',
+  ogTitle: 'Blog — Vida en el Jardín',
+  ogDescription: 'Ensayos botánicos y guías de jardinería para cultivadores curiosos.',
+})
+
+const posts = usePostsStore()
+const searchQuery = ref('')
 
 let searchTimer: any
 watch(searchQuery, (q) => {
   clearTimeout(searchTimer)
-  searchTimer = setTimeout(() => {
-    posts.fetchPosts({ q })
-  }, 300)
+  searchTimer = setTimeout(() => posts.fetchPosts({ q }), 300)
 })
 
 onMounted(async () => {
-  await posts.fetchPosts()
+  try {
+    await posts.fetchPosts()
+  } catch (e) { /* graceful — falls back to mocks */ }
 })
 
-useSeoMeta({
-  title: 'Blog de Jardinería',
-  description: 'Consejos, guías y secretos para el cuidado de tus plantas. Aprende de expertos en jardinería.',
-  ogTitle: 'Blog | Vida En el Jardín',
-  ogDescription: 'Descubre consejos, guías y secretos para el cuidado de tus plantas.',
-  ogType: 'website',
-})
+const featured = computed(() => posts.featuredPost)
+const listPosts = computed(() => posts.postsWithoutFeatured)
+
+const formatDate = (d?: string) => {
+  if (!d) return ''
+  return new Date(d).toLocaleDateString('es-MX', { month: 'short', year: 'numeric' })
+}
 </script>
 
- <template>
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-green-600 to-emerald-700 text-white py-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="max-w-3xl">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center">
-            </div>
-            <h1 class="text-5xl" style="font-family: serif">
-              Blog
-            </h1>
-          </div>
+<template>
+  <main class="relative min-h-screen">
+    <!-- Hero -->
+    <section class="relative pt-40 pb-20 px-6 lg:px-12 overflow-hidden">
+      <div class="absolute -top-40 left-1/3 w-[700px] h-[700px] rounded-full bg-moss/25 blur-[140px]" />
 
-          <p class="text-xl text-green-100 mb-8">
-            Descubre consejos, guías y secretos para el cuidado de tus plantas.
-            Aprende de expertos y convierte tu espacio en un jardín próspero.
-          </p>
-
-          <!-- Search Bar -->
-          <div class="relative max-w-xl">
-            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-                type="text"
-                placeholder="Buscar artículos..."
-                v-model="searchQuery"
-                class="w-full pl-12 pr-4 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white shadow-lg"
-            />
-          </div>
+      <div class="relative max-w-[1400px] mx-auto grid lg:grid-cols-12 gap-12">
+        <div class="lg:col-span-2">
+          <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">Lecturas</div>
         </div>
-      </div>
-    </section>
-
-    <!-- Categories Filter -->
-    <section class="bg-white border-b border-gray-200 sticky top-[72px] z-20 shadow-sm">
-      <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center gap-4 overflow-x-auto">
-          <div class="flex items-center gap-2 text-gray-600 flex-shrink-0">
-            <span class="text-sm">Filtrar:</span>
-          </div>
-
-          <div class="flex gap-2">
-            <button
-                v-for="category in categories"
-                :key="category"
-                @click="selectedCategory = category"
-                class="px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap"
-                :class="selectedCategory === category
-              ? 'bg-green-600 text-white shadow-md'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'"
-            >
-              {{ category }}
-            </button>
-          </div>
+        <div class="lg:col-span-7">
+          <h1
+            v-motion
+            :initial="{ opacity: 0, y: 30 }"
+            :enter="{ opacity: 1, y: 0, transition: { duration: 800 } }"
+            class="font-display text-cream text-[clamp(3rem,7vw,6rem)] leading-[0.95] tracking-tightest font-light"
+          >
+            <span class="block">Ensayos para</span>
+            <span class="block"><em class="font-display-italic text-terra">cultivadores</em></span>
+            <span class="block">curiosos.</span>
+          </h1>
         </div>
-      </div>
-    </section>
-
-    <!-- Featured Post -->
-    <section class="max-w-7xl mx-auto px-6 py-12">
-      <div class="mb-8">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-1 h-8 bg-green-600 rounded-full"></div>
-          <h2 class="text-3xl text-gray-800" style="font-family: serif">
-            Artículo Destacado
-          </h2>
-        </div>
-      </div>
-
-      <div v-if="featured" class="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all group mb-16">
-        <div class="grid md:grid-cols-2 gap-0">
-          <div class="relative h-96 md:h-full bg-gradient-to-br from-gray-100 to-green-50 overflow-hidden">
-            <img
-                :src="featured.coverImage"
-                :alt="featured.title"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-            <div class="absolute top-6 left-6">
-            <span class="px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm shadow-lg">
-              Destacado
-            </span>
-            </div>
-          </div>
-
-          <div class="p-8 md:p-12 flex flex-col justify-center">
-          <span class="text-sm text-green-600 uppercase tracking-wide mb-3">
-            {{ featured.category }} • {{ featured.readTime }} de lectura
-          </span>
-
-            <h2
-                class="text-3xl md:text-4xl mb-4 text-gray-800 group-hover:text-green-600 transition-colors"
-                style="font-family: serif"
-            >
-              {{ featured.title }}
-            </h2>
-
-            <p class="text-gray-600 mb-6 leading-relaxed">
-              {{ featured.excerpt }}
-            </p>
-
-            <div class="flex items-center gap-4 mb-6">
-              <img
-                  :src="featured.author?.image || ''"
-                  :alt="featured.author?.name || 'Autor'"
-                  class="w-12 h-12 rounded-full object-cover"
-              />
-              <div>
-                <p class="text-gray-800">{{ featured.author?.name }}</p>
-                <p class="text-sm text-gray-500">{{ featured.createdAt }}</p>
-              </div>
-            </div>
-
-            <nuxt-link :to="`/blog/${featured.slug}`" class="px-6 py-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all shadow-md self-start">
-              Leer artículo completo
-            </nuxt-link>
-          </div>
-        </div>
-      </div>
-
-      <!-- All Posts Grid -->
-      <div class="mb-8">
-        <div class="flex items-center justify-between mb-6">
-          <div class="flex items-center gap-2">
-            <div class="w-1 h-8 bg-green-600 rounded-full"></div>
-            <h2 class="text-3xl text-gray-800" style="font-family: serif">
-              Todos los Artículos
-            </h2>
-          </div>
-          <p class="text-gray-600">
-            {{ posts.posts.length }} {{ posts.posts.length === 1 ? 'artículo' : 'artículos' }}
+        <div class="lg:col-span-3 lg:pt-6">
+          <p
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :enter="{ opacity: 1, y: 0, transition: { delay: 300, duration: 700 } }"
+            class="text-cream-60 leading-relaxed"
+          >
+            Lecturas largas y guías cortas. Escrito por jardineros, no por algoritmos.
+            Sin SEO bait, sin listicles vacíos.
           </p>
         </div>
       </div>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <BlogCard
-            v-for="(post, index) in listPosts"
-            :key="index"
-            v-bind="post"
+      <!-- Search -->
+      <div
+        v-motion
+        :initial="{ opacity: 0, y: 20 }"
+        :enter="{ opacity: 1, y: 0, transition: { delay: 600, duration: 700 } }"
+        class="relative max-w-[1400px] mx-auto mt-12"
+      >
+        <div class="relative flex items-center bg-ink-card border border-line rounded-full px-7 py-2 max-w-2xl">
+          <Search class="w-5 h-5 text-cream-40 flex-shrink-0" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Buscar entre los ensayos..."
+            class="flex-1 bg-transparent text-cream placeholder-cream/30 px-4 py-3 outline-none text-base"
+          />
+          <button
+            v-if="searchQuery"
+            @click="searchQuery = ''"
+            class="text-cream-40 hover:text-terra p-1"
+          >
+            <X class="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured -->
+    <section v-if="featured" class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-16">
+      <NuxtLink
+        :to="`/blog/${(featured as any).slug}`"
+        v-motion
+        :initial="{ opacity: 0, y: 30 }"
+        :visible-once="{ opacity: 1, y: 0, transition: { duration: 800 } }"
+        class="group block relative aspect-[16/9] lg:aspect-[21/9] rounded-3xl overflow-hidden border border-line"
+      >
+        <img
+          :src="(featured as any).image"
+          :alt="featured.title"
+          class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-105"
         />
-      </div>
-
-      <div v-if="listPosts.length === 0" class="text-center py-16">
-        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Search class="w-10 h-10 text-gray-400" />
+        <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
+        <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-14">
+          <span class="px-3 py-1 bg-cream/15 backdrop-blur border border-cream/20 rounded-full text-cream text-[10px] tracking-[0.25em] uppercase">
+            {{ (featured as any).category || 'Featured' }}
+          </span>
+          <h2 class="mt-6 font-display text-cream text-4xl lg:text-7xl tracking-tighter leading-[0.95] max-w-3xl group-hover:text-terra transition-colors duration-500">
+            {{ featured.title }}
+          </h2>
+          <p class="mt-5 text-cream/80 max-w-2xl text-base lg:text-lg leading-relaxed">
+            {{ featured.excerpt }}
+          </p>
+          <div class="mt-6 flex items-center gap-4 text-cream-40 text-xs tracking-wider uppercase">
+            <span>{{ formatDate((featured as any).publishedAt) }}</span>
+            <span class="text-terra">·</span>
+            <span>{{ (featured as any).readTime }}</span>
+          </div>
         </div>
-        <p class="text-gray-500 mb-2">No se encontraron artículos</p>
-        <p class="text-sm text-gray-400">Intenta con otra búsqueda o categoría</p>
-      </div>
+      </NuxtLink>
+    </section>
 
-      <!-- Load More -->
-      <div v-if="listPosts.length > 0" class="text-center">
-        <button
-          :disabled="!posts.hasMore || posts.loading"
-          @click="posts.loadMore()"
-          class="px-8 py-3 bg-white text-green-600 border-2 border-green-600 rounded-full hover:bg-green-50 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+    <!-- Empty state -->
+    <section v-if="!featured && listPosts.length === 0" class="px-6 py-32 text-center">
+      <div class="font-display text-cream text-4xl mb-4 tracking-tighter">
+        Aún
+        <em class="font-display-italic text-terra">germinando</em>.
+      </div>
+      <p class="text-cream-60 max-w-md mx-auto">
+        Estamos escribiendo más. Vuelve pronto o ajusta tu búsqueda si tienes algún término activo.
+      </p>
+    </section>
+
+    <!-- Grid -->
+    <section v-if="listPosts.length > 0" class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-32">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        <NuxtLink
+          v-for="(post, idx) in listPosts"
+          :key="post.id"
+          :to="`/blog/${(post as any).slug}`"
+          v-motion
+          :initial="{ opacity: 0, y: 40 }"
+          :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: (idx % 6) * 80 } }"
+          class="group block"
         >
-          {{ posts.loading ? 'Cargando...' : posts.hasMore ? 'Cargar más artículos' : 'No hay más' }}
-        </button>
+          <div class="relative aspect-[4/5] rounded-2xl overflow-hidden mb-6 bg-ink-card">
+            <img
+              :src="(post as any).image"
+              :alt="post.title"
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
+            <div class="absolute top-5 left-5">
+              <span class="px-3 py-1.5 bg-cream/15 backdrop-blur border border-cream/20 rounded-full text-cream text-[11px] tracking-[0.2em] uppercase">
+                {{ (post as any).category }}
+              </span>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 text-cream-40 text-xs tracking-wider uppercase mb-3">
+            <span>{{ formatDate((post as any).publishedAt) }}</span>
+            <span class="text-terra">·</span>
+            <span>{{ (post as any).readTime }}</span>
+          </div>
+          <h3 class="font-display text-cream text-2xl lg:text-3xl tracking-tighter leading-tight group-hover:text-terra transition-colors duration-500">
+            {{ post.title }}
+          </h3>
+          <p class="mt-3 text-cream-60 leading-relaxed line-clamp-3">
+            {{ post.excerpt }}
+          </p>
+        </NuxtLink>
       </div>
     </section>
-
-    <!-- Newsletter CTA -->
-    <section class="bg-gradient-to-br from-green-600 to-emerald-600 py-16">
-      <div class="max-w-4xl mx-auto px-6 text-center text-white">
-        <h2 class="text-3xl md:text-4xl mb-4" style="font-family: serif">
-          No te pierdas ningún artículo
-        </h2>
-
-        <p class="text-xl text-green-100 mb-8">
-          Suscríbete y recibe los mejores consejos directamente en tu correo
-        </p>
-
-        <NewsletterInline />
-      </div>
-    </section>
-  </template>
+  </main>
+</template>
