@@ -1,94 +1,107 @@
+<script setup lang="ts">
+import { Instagram, Twitter, Youtube } from 'lucide-vue-next'
+
+const year = new Date().getFullYear()
+
+const sections = [
+  {
+    title: 'Explorar',
+    links: [
+      { name: 'Inicio', path: '/' },
+      { name: 'Especies', path: '/species' },
+      { name: 'Blog', path: '/blog' },
+      { name: 'Tienda', path: '/store' },
+    ],
+  },
+  {
+    title: 'Apoyo',
+    links: [
+      { name: 'Preguntas frecuentes', path: '/faq' },
+      { name: 'Envíos', path: '/shipments' },
+      { name: 'Devoluciones', path: '/returns' },
+      { name: 'Contacto', path: '/contact' },
+    ],
+  },
+]
+</script>
+
 <template>
-  <footer class="bg-gray-900 text-gray-300 py-12">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-
-        <!-- Logo + descripción -->
-        <div>
-          <div class="flex items-center gap-2 mb-4">
-            <div
-                class="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center"
-            >
-            </div>
-            <span class="text-white" style="font-family: serif">
-              Vida en el Jardín
-            </span>
+  <footer class="relative px-6 lg:px-12 pt-32 pb-10 border-t border-line max-w-[1400px] mx-auto">
+    <div class="grid lg:grid-cols-12 gap-12 mb-20">
+      <!-- Brand -->
+      <div class="lg:col-span-5">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-10 h-10 rounded-full border border-cream/40 flex items-center justify-center">
+            <span class="font-display text-cream text-xl leading-none">v</span>
           </div>
-          <p class="text-sm text-gray-400">
-            Tu destino para plantas, consejos y inspiración verde.
-          </p>
+          <span class="font-display text-cream text-2xl tracking-tightest">Vida en el Jardín</span>
         </div>
+        <p class="text-cream-60 text-lg leading-relaxed max-w-md">
+          Una guía botánica para quienes consideran el jardín
+          <em class="font-display-italic">parte del hogar, no su decorado</em>.
+        </p>
 
-        <!-- Explorar -->
-        <div>
-          <h4 class="text-white mb-4">Explorar</h4>
-          <ul class="space-y-2 text-sm">
-            <li  v-for="link in navigationLinks"
-                 :key="link.path">
-              <NuxtLink
-                  :to="link.path"
-                  class=" hover:text-green-600 transition-colors"
-              >
-                {{ link.name }}
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Ayuda -->
-        <div>
-          <h4 class="text-white mb-4">Ayuda</h4>
-          <ul class="space-y-2 text-sm">
-<!--            <li>-->
-<!--              <NuxtLink to="/shipments" class="hover:text-green-400 transition-colors"-->
-<!--              >Envíos</NuxtLink>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <NuxtLink to="/returns" class="hover:text-green-400 transition-colors"-->
-<!--              >Devoluciones</NuxtLink-->
-<!--              >-->
-<!--            </li>-->
-            <li>
-              <NuxtLink to="/faq" class="hover:text-green-400 transition-colors">FAQ</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/contact"
-                  class="hover:text-green-400 transition-colors"
-              >
-                Contacto
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Newsletter -->
-        <div>
-          <h4 class="text-white mb-4">Newsletter</h4>
-          <p class="text-sm text-gray-400 mb-3">
-            Recibe consejos y ofertas especiales
-          </p>
-          <NewsletterFooter />
+        <div class="mt-10 flex items-center gap-4">
+          <a
+            v-for="(Icon, i) in [Instagram, Twitter, Youtube]"
+            :key="i"
+            href="#"
+            class="w-11 h-11 rounded-full border border-cream/20 flex items-center justify-center text-cream-60 hover:bg-terra hover:border-terra hover:text-ink transition-all duration-500"
+          >
+            <component :is="Icon" class="w-4 h-4" />
+          </a>
         </div>
       </div>
 
+      <!-- Sections -->
       <div
-          class="border-t border-gray-800 pt-8 text-center text-sm text-gray-400"
+        v-for="section in sections"
+        :key="section.title"
+        class="lg:col-span-2"
       >
-        <p>© 2025 Vida en el Jardín. Todos los derechos reservados.</p>
+        <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-6">
+          {{ section.title }}
+        </div>
+        <ul class="space-y-4">
+          <li v-for="link in section.links" :key="link.path">
+            <NuxtLink
+              :to="link.path"
+              class="text-cream/80 hover:text-terra transition-colors text-base"
+            >
+              {{ link.name }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Time / location -->
+      <div class="lg:col-span-3">
+        <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-6">Desde</div>
+        <p class="text-cream/80 mb-3">Ciudad de México, MX</p>
+        <p class="text-cream-60 text-sm">
+          Lunes a viernes
+          <br />
+          9:00 — 18:00 hrs
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="pt-10 border-t border-line flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <p class="text-cream-40 text-xs tracking-wide">
+        © {{ year }} Vida en el Jardín · Todos los derechos reservados
+      </p>
+      <div class="flex items-center gap-6 text-cream-40 text-xs tracking-wide">
+        <NuxtLink to="/" class="hover:text-cream transition-colors">Privacidad</NuxtLink>
+        <NuxtLink to="/" class="hover:text-cream transition-colors">Términos</NuxtLink>
+      </div>
+    </div>
+
+    <!-- Mega watermark -->
+    <div class="mt-20 overflow-hidden pointer-events-none">
+      <div class="font-display text-cream/[0.03] text-[20vw] leading-none tracking-tighter whitespace-nowrap text-center">
+        VIDA EN EL JARDÍN
       </div>
     </div>
   </footer>
 </template>
-<script setup lang="ts">
-import NewsletterFooter from './NewsletterFooter.vue'
-
-const navigationLinks = [
-  { name: 'Inicio', path: '/' },
-  { name: 'Blog', path: '/blog' },
-  // { name: 'Tienda', path: '/store' },
-  { name: 'Especies', path: '/species' },
-  // { name: 'Consejos', path: '/tips' },
-]
-</script>
-
-

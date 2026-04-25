@@ -1,175 +1,114 @@
 <script setup lang="ts">
-import { Droplets, Sun, TrendingUp, Skull, Info } from "lucide-vue-next";
+import { Droplets, Sun, ArrowUpRight, AlertTriangle } from 'lucide-vue-next'
 import { onImgError } from '~~/utils/image'
 import type { Species } from '~~/models/Species'
 
 const props = defineProps<{
   species: Species
-}>();
-
-const getDifficultyColor = (careLevel?: string) => {
-  switch (careLevel) {
-    case "easy":
-      return "bg-green-100 text-green-700";
-    case "medium":
-      return "bg-yellow-100 text-yellow-700";
-    case "hard":
-      return "bg-orange-100 text-orange-700";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
+  index?: number
+}>()
 
 const getDifficultyLabel = (careLevel?: string) => {
   switch (careLevel) {
-    case "easy":
-      return "Fácil";
-    case "medium":
-      return "Moderado";
-    case "hard":
-      return "Avanzado";
-    default:
-      return "N/A";
+    case 'easy': return 'Fácil'
+    case 'medium': return 'Moderado'
+    case 'hard': return 'Avanzado'
+    default: return null
   }
-};
+}
 
-const getWaterLevel = (level?: string) => {
-  return level === "low" ? 1 : level === "medium" ? 2 : level === "high" ? 3 : 0;
-};
+const getLevelDots = (level?: string): number => {
+  return level === 'low' ? 1 : level === 'medium' ? 2 : level === 'high' ? 3 : 0
+}
 
-const getLightLevel = (level?: string) => {
-  return level === "low" ? 1 : level === "medium" ? 2 : level === "high" ? 3 : 0;
-};
-
-const getGrowthRateLabel = (rate?: string) => {
-  switch (rate) {
-    case "slow":
-      return "Lento";
-    case "medium":
-      return "Moderado";
-    case "fast":
-      return "Rápido";
-    default:
-      return "N/A";
-  }
-};
-
-const getToxicityLabel = (toxicity?: string) => {
-  switch (toxicity) {
-    case "none":
-      return "No tóxica";
-    case "pets":
-      return "Tóxica para mascotas";
-    case "humans":
-      return "Tóxica para humanos";
-    case "both":
-      return "Tóxica";
-    default:
-      return null;
-  }
-};
-
-const getToxicityColor = (toxicity?: string) => {
-  return toxicity && toxicity !== "none" ? "text-red-500" : "text-green-500";
-};
+const isToxic = (toxicity?: string) =>
+  toxicity && toxicity !== 'none'
 </script>
 
 <template>
-  <div class="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all group">
-    <!-- Image -->
-    <div class="relative h-64 bg-gradient-to-br from-gray-100 to-green-50 overflow-hidden">
+  <article
+    v-motion
+    :initial="{ opacity: 0, y: 30 }"
+    :visible-once="{
+      opacity: 1, y: 0,
+      transition: { duration: 600, delay: ((props.index ?? 0) % 9) * 60 }
+    }"
+    class="group relative overflow-hidden rounded-2xl bg-ink-card border border-line cursor-pointer transition-all duration-500 hover:border-cream/30"
+  >
+    <!-- Image area -->
+    <div class="relative aspect-[4/5] overflow-hidden">
       <img
-          :src="species.image"
-          :alt="species.commonName"
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          @error="onImgError"
+        :src="species.image"
+        :alt="species.commonName"
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
+        @error="onImgError"
       />
+      <div class="absolute inset-0 bg-gradient-to-t from-ink/95 via-ink/30 to-transparent" />
 
-      <div class="absolute top-4 right-4 flex flex-col gap-2">
+      <!-- Top right arrow icon -->
+      <div class="absolute top-4 right-4 w-9 h-9 rounded-full bg-cream/10 backdrop-blur border border-cream/20 flex items-center justify-center transition-all duration-500 group-hover:bg-terra group-hover:border-terra">
+        <ArrowUpRight class="w-4 h-4 text-cream transition-transform duration-500 group-hover:rotate-45 group-hover:text-ink" />
+      </div>
+
+      <!-- Top left tags -->
+      <div class="absolute top-4 left-4 flex flex-col gap-2">
         <span
-            class="px-3 py-1 rounded-full text-xs shadow-md backdrop-blur-sm"
-            :class="getDifficultyColor(species.careLevel)"
+          v-if="getDifficultyLabel(species.careLevel)"
+          class="px-3 py-1 bg-cream/15 backdrop-blur border border-cream/20 rounded-full text-cream text-[10px] tracking-[0.2em] uppercase"
         >
           {{ getDifficultyLabel(species.careLevel) }}
         </span>
         <span
-            v-if="getToxicityLabel(species.toxicity)"
-            class="px-3 py-1 rounded-full text-xs shadow-md backdrop-blur-sm bg-white/90 flex items-center gap-1"
-            :class="getToxicityColor(species.toxicity)"
+          v-if="isToxic(species.toxicity)"
+          class="inline-flex items-center gap-1 px-3 py-1 bg-terra/90 backdrop-blur rounded-full text-ink text-[10px] tracking-[0.15em] uppercase"
         >
-          <Skull class="w-3 h-3" />
-          {{ getToxicityLabel(species.toxicity) }}
+          <AlertTriangle class="w-3 h-3" />
+          Tóxica
         </span>
       </div>
-    </div>
 
-    <!-- Content -->
-    <div class="p-6">
-      <div class="mb-3">
-        <h3 class="text-xl text-gray-800 mb-1">
+      <!-- Bottom info -->
+      <div class="absolute bottom-0 left-0 right-0 p-5">
+        <div class="text-cream-40 text-[10px] tracking-[0.25em] uppercase mb-1.5">
+          {{ species.scientificName }}
+        </div>
+        <h3 class="font-display text-cream text-2xl tracking-tighter leading-tight">
           {{ species.commonName }}
         </h3>
-        <p class="text-sm text-gray-500 italic">{{ species.scientificName }}</p>
-        <p v-if="species.family" class="text-xs text-gray-400 mt-1">Familia: {{ species.family }}</p>
       </div>
-
-      <p class="text-sm text-gray-600 mb-4 line-clamp-2">
-        {{ species.description || 'Sin descripción disponible' }}
-      </p>
-
-      <!-- Care Requirements -->
-      <div class="space-y-3 mb-4">
-        <!-- Water Needs -->
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 text-sm text-gray-600">
-            <Droplets class="w-4 h-4 text-blue-500" />
-            <span>Riego:</span>
-          </div>
-
-          <div class="flex gap-1">
-            <div
-                v-for="n in 3"
-                :key="n"
-                class="w-2 h-2 rounded-full"
-                :class="n <= getWaterLevel(species.watering) ? 'bg-blue-500' : 'bg-gray-200'"
-            />
-          </div>
-        </div>
-
-        <!-- Light Needs -->
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 text-sm text-gray-600">
-            <Sun class="w-4 h-4 text-yellow-500" />
-            <span>Luz:</span>
-          </div>
-
-          <div class="flex gap-1">
-            <div
-                v-for="n in 3"
-                :key="n"
-                class="w-2 h-2 rounded-full"
-                :class="n <= getLightLevel(species.sunlight) ? 'bg-yellow-500' : 'bg-gray-200'"
-            />
-          </div>
-        </div>
-
-        <!-- Growth Rate -->
-        <div v-if="species.growthRate" class="flex items-center justify-between">
-          <div class="flex items-center gap-2 text-sm text-gray-600">
-            <TrendingUp class="w-4 h-4 text-green-500" />
-            <span>Crecimiento:</span>
-          </div>
-          <span class="text-sm text-gray-700">{{ getGrowthRateLabel(species.growthRate) }}</span>
-        </div>
-      </div>
-
-      <!-- Action Button -->
-      <button
-          class="w-full py-2 bg-green-50 text-green-700 rounded-xl hover:bg-green-100 transition-colors flex items-center justify-center gap-2"
-      >
-        <Info class="w-4 h-4" />
-        <span class="text-sm">Ver detalles</span>
-      </button>
     </div>
-  </div>
+
+    <!-- Footer with care indicators -->
+    <div class="px-5 py-4 flex items-center justify-between border-t border-line">
+      <!-- Water -->
+      <div class="flex items-center gap-2">
+        <Droplets class="w-3.5 h-3.5 text-cream-40" />
+        <div class="flex gap-1">
+          <div
+            v-for="n in 3" :key="n"
+            class="w-1.5 h-1.5 rounded-full transition-colors duration-500"
+            :class="n <= getLevelDots(species.watering) ? 'bg-terra' : 'bg-cream/15'"
+          />
+        </div>
+      </div>
+
+      <!-- Sun -->
+      <div class="flex items-center gap-2">
+        <Sun class="w-3.5 h-3.5 text-cream-40" />
+        <div class="flex gap-1">
+          <div
+            v-for="n in 3" :key="n"
+            class="w-1.5 h-1.5 rounded-full transition-colors duration-500"
+            :class="n <= getLevelDots(species.sunlight) ? 'bg-amber-brand' : 'bg-cream/15'"
+          />
+        </div>
+      </div>
+
+      <!-- Family or growth -->
+      <div v-if="species.family" class="text-cream-40 text-[10px] tracking-[0.2em] uppercase truncate max-w-[100px]">
+        {{ species.family }}
+      </div>
+    </div>
+  </article>
 </template>

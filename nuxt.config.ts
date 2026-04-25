@@ -32,7 +32,18 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/image',
     '@nuxtjs/sitemap',
+    '@nuxt/fonts',
+    '@vueuse/motion/nuxt',
   ],
+
+  css: ['~/assets/css/main.css'],
+
+  fonts: {
+    families: [
+      { name: 'Fraunces', provider: 'google', weights: [300, 400, 500, 600, 700, 900], styles: ['normal', 'italic'] },
+      { name: 'Inter', provider: 'google', weights: [300, 400, 500, 600, 700] },
+    ],
+  },
 
   // Sitemap configuration
   sitemap: {
