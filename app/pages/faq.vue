@@ -1,177 +1,153 @@
-<template>
-  <div class="min-h-screen bg-gray-50">
-
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-br from-purple-600 to-pink-700 text-white py-20">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="max-w-3xl mx-auto text-center">
-          <div class="w-16 h-16 bg-white/20 backdrop-blur rounded-full flex items-center justify-center mx-auto mb-6">
-            <HelpCircle class="w-8 h-8" />
-          </div>
-          <h1 class="text-5xl mb-4" style="font-family: serif;">Preguntas Frecuentes</h1>
-          <p class="text-xl text-purple-100 mb-8">
-            Encuentra respuestas rápidas a las dudas más comunes sobre pedidos, envíos, pagos y cuidado de plantas.
-          </p>
-
-          <!-- Search Bar -->
-          <div class="relative max-w-2xl mx-auto">
-            <Search class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-                type="text"
-                placeholder="¿Qué necesitas saber?"
-                v-model="searchQuery"
-                class="w-full pl-12 pr-4 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white shadow-lg"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick Stats -->
-    <section class="bg-white py-12 border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-          <div>
-            <div class="text-3xl text-purple-600 mb-1" style="font-family: serif;">
-              {{ faqs.length }}
-            </div>
-            <p class="text-sm text-gray-600">Preguntas respondidas</p>
-          </div>
-          <div>
-            <div class="text-3xl text-purple-600 mb-1" style="font-family: serif;">
-              {'<'}2h
-            </div>
-            <p class="text-sm text-gray-600">Tiempo de respuesta</p>
-          </div>
-          <div>
-            <div class="text-3xl text-purple-600 mb-1" style="font-family: serif;">
-              95%
-            </div>
-            <p class="text-sm text-gray-600">Satisfacción</p>
-          </div>
-          <div>
-            <div class="text-3xl text-purple-600 mb-1" style="font-family: serif;">
-              24/7
-            </div>
-            <p class="text-sm text-gray-600">Soporte disponible</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Categories -->
-    <section class="bg-white border-b border-gray-200 sticky top-[72px] z-20 shadow-sm">
-      <div class="max-w-7xl mx-auto px-6 py-4">
-        <div class="flex items-center gap-4 overflow-x-auto">
-          <span class="text-sm text-gray-600 flex-shrink-0">Categorías:</span>
-          <div class="flex gap-2">
-            <button
-                v-for="category in categories"
-                :key="category.name"
-                @click="selectedCategory = category.name"
-                :class="[
-                'px-4 py-2 rounded-full text-sm transition-all whitespace-nowrap flex items-center gap-2',
-                selectedCategory === category.name
-                  ? 'bg-purple-600 text-white shadow-md'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              ]"
-            >
-              <component :is="category.icon" class="w-4 h-4" />
-              <span>{{ category.name }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Popular Questions -->
-    <section class="max-w-7xl mx-auto px-6 py-12">
-      <div class="mb-8">
-        <div class="flex items-center gap-2 mb-4">
-          <div class="w-1 h-8 bg-purple-600 rounded-full"></div>
-          <h2 class="text-3xl text-gray-800" style="font-family: serif;">
-            {{ selectedCategory === 'Todos' ? 'Preguntas Más Populares' : `Preguntas sobre ${selectedCategory}` }}
-          </h2>
-        </div>
-        <p class="text-gray-600">
-          {{ filteredFaqs.length }} {{ filteredFaqs.length === 1 ? 'pregunta encontrada' : 'preguntas encontradas' }}
-        </p>
-      </div>
-
-      <div v-if="filteredFaqs.length" class="space-y-4 mb-12">
-        <details v-for="(faq, index) in filteredFaqs" :key="index" class="bg-white rounded-2xl shadow-md overflow-hidden group">
-          <summary class="px-6 py-5 cursor-pointer flex items-start justify-between hover:bg-gray-50 transition-colors">
-            <div class="flex-1 pr-4">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">
-                  {{ faq.category }}
-                </span>
-              </div>
-              <span class="text-gray-800 text-lg">{{ faq.question }}</span>
-            </div>
-            <span class="text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0">▼</span>
-          </summary>
-          <div class="px-6 pb-5 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
-            {{ faq.answer }}
-          </div>
-        </details>
-      </div>
-
-      <div v-else class="text-center py-16">
-        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Search class="w-10 h-10 text-gray-400" />
-        </div>
-        <p class="text-gray-500 mb-2">No se encontraron preguntas</p>
-        <p class="text-sm text-gray-400">Intenta con otra búsqueda o categoría</p>
-      </div>
-    </section>
-  </div>
-</template>
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { HelpCircle, ShoppingCart, Truck, CreditCard, Sprout, Search } from 'lucide-vue-next'
+import { Search, X, Plus, Minus } from 'lucide-vue-next'
 import { useFaqStore } from '~~/stores/Faq'
-import { useSeoMeta } from '#imports'
+import PageHero from '~/components/common/PageHero.vue'
+
+useSeoMeta({
+  title: 'Preguntas Frecuentes — Vida en el Jardín',
+  description: 'Respuestas rápidas a dudas comunes sobre pedidos, envíos, pagos y cuidado de plantas.',
+})
 
 const searchQuery = ref('')
 const selectedCategory = ref('Todos')
+const openId = ref<string | null>(null)
 
-const categories = [
-  { name: 'Todos', icon: HelpCircle },
-  { name: 'Pedidos', icon: ShoppingCart },
-  { name: 'Envíos', icon: Truck },
-  { name: 'Pagos', icon: CreditCard },
-  { name: 'Plantas', icon: Sprout }
-]
+const categories = ['Todos', 'Pedidos', 'Envíos', 'Pagos', 'Plantas']
 
 const store = useFaqStore()
 const faqs = computed(() => store.allFaqs)
 
 onMounted(async () => {
-  await store.fetchFaqs()
-})
-
-watch(searchQuery, (q) => {
-  // Si backend soporta búsqueda, podríamos llamar store.fetchFaqs(q)
-  // pero mantenemos el filtrado en cliente para no cambiar UX
+  try { await store.fetchFaqs() } catch (e) { /* falls back */ }
 })
 
 const filteredFaqs = computed(() =>
-  faqs.value.filter(faq => {
-    const matchesCategory = selectedCategory.value === 'Todos' || faq.category === selectedCategory.value
+  faqs.value.filter(f => {
+    const matchCat = selectedCategory.value === 'Todos' || f.category === selectedCategory.value
     const q = searchQuery.value.toLowerCase()
-    const matchesSearch =
-      q === '' ||
-      (faq.question || '').toLowerCase().includes(q) ||
-      (faq.answer || '').toLowerCase().includes(q)
-    return matchesCategory && matchesSearch
+    const matchQ = q === '' ||
+      (f.question || '').toLowerCase().includes(q) ||
+      (f.answer || '').toLowerCase().includes(q)
+    return matchCat && matchQ
   })
 )
 
-useSeoMeta({
-  title: 'Preguntas Frecuentes | Vida en el Jardín',
-  description: 'Respuestas rápidas a dudas comunes sobre pedidos, envíos, pagos y el cuidado de plantas.',
-  ogTitle: 'Preguntas Frecuentes | Vida en el Jardín',
-  ogDescription: 'Encuentra respuestas rápidas a las dudas más comunes.',
-})
+const toggle = (id: string) => {
+  openId.value = openId.value === id ? null : id
+}
 </script>
+
+<template>
+  <main class="relative min-h-screen">
+    <PageHero
+      eyebrow="Preguntas frecuentes"
+      title="Las dudas"
+      italic="comunes"
+      trailing="ya resueltas."
+      description="Si tu duda no está aquí, escríbenos. Respondemos antes de 24h, casi siempre antes de 2."
+    >
+      <template #after>
+        <div class="relative max-w-[1400px] mx-auto mt-12 px-6 lg:px-12">
+          <div class="relative flex items-center bg-ink-card border border-line rounded-full px-7 py-2 max-w-2xl">
+            <Search class="w-5 h-5 text-cream-40 flex-shrink-0" />
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="¿Qué necesitas saber?"
+              class="flex-1 bg-transparent text-cream placeholder-cream/30 px-4 py-3 outline-none text-base"
+            />
+            <button v-if="searchQuery" @click="searchQuery = ''" class="text-cream-40 hover:text-terra p-1">
+              <X class="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      </template>
+    </PageHero>
+
+    <!-- Categories -->
+    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-12">
+      <div class="flex flex-wrap gap-2">
+        <button
+          v-for="c in categories"
+          :key="c"
+          @click="selectedCategory = c"
+          :class="[
+            'px-5 py-2.5 rounded-full text-sm transition-all duration-300 border',
+            selectedCategory === c
+              ? 'bg-terra border-terra text-ink'
+              : 'bg-transparent border-line text-cream-60 hover:border-cream/40 hover:text-cream'
+          ]"
+        >
+          {{ c }}
+        </button>
+      </div>
+    </section>
+
+    <!-- FAQ accordion -->
+    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-32">
+      <div v-if="filteredFaqs.length === 0" class="py-20 text-center">
+        <div class="font-display text-cream text-3xl mb-3 tracking-tighter">
+          Sin respuesta
+          <em class="font-display-italic text-terra">aún</em>.
+        </div>
+        <p class="text-cream-60">Pero podemos contestarte directo.</p>
+        <NuxtLink
+          to="/contact"
+          class="mt-8 inline-flex items-center gap-2 px-6 py-3 border border-cream/30 text-cream rounded-full text-sm hover:border-cream hover:bg-cream/5 transition-all"
+        >
+          Escríbenos
+        </NuxtLink>
+      </div>
+
+      <div v-else class="grid lg:grid-cols-12 gap-8">
+        <div class="lg:col-span-2 lg:sticky lg:top-32 lg:self-start">
+          <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">
+            {{ filteredFaqs.length }} {{ filteredFaqs.length === 1 ? 'respuesta' : 'respuestas' }}
+          </div>
+        </div>
+
+        <div class="lg:col-span-10 divide-y divide-line">
+          <div
+            v-for="(faq, idx) in filteredFaqs"
+            :key="faq.id"
+            v-motion
+            :initial="{ opacity: 0, y: 20 }"
+            :visible-once="{ opacity: 1, y: 0, transition: { duration: 500, delay: (idx % 8) * 50 } }"
+          >
+            <button
+              @click="toggle(faq.id)"
+              class="w-full flex items-start justify-between gap-6 py-7 text-left group"
+            >
+              <div class="flex-1">
+                <div class="text-terra text-[10px] tracking-[0.25em] uppercase mb-2">{{ faq.category }}</div>
+                <h3 class="font-display text-cream text-2xl lg:text-3xl tracking-tighter leading-tight group-hover:text-terra transition-colors duration-300">
+                  {{ faq.question }}
+                </h3>
+              </div>
+              <div class="flex-shrink-0 w-10 h-10 rounded-full border border-cream/20 flex items-center justify-center group-hover:border-terra transition-colors duration-300 mt-2">
+                <Minus v-if="openId === faq.id" class="w-4 h-4 text-cream group-hover:text-terra transition-colors" />
+                <Plus v-else class="w-4 h-4 text-cream group-hover:text-terra transition-colors" />
+              </div>
+            </button>
+
+            <Transition
+              enter-active-class="transition-all duration-400 ease-out-quint"
+              enter-from-class="opacity-0 max-h-0"
+              enter-to-class="opacity-100 max-h-96"
+              leave-active-class="transition-all duration-300"
+              leave-from-class="opacity-100 max-h-96"
+              leave-to-class="opacity-0 max-h-0"
+            >
+              <div v-if="openId === faq.id" class="overflow-hidden">
+                <div class="pb-7 pr-16 text-cream/80 text-lg leading-relaxed">
+                  {{ faq.answer }}
+                </div>
+              </div>
+            </Transition>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</template>

@@ -97,10 +97,13 @@ export default defineNuxtConfig({
     }
   },
 
-  // Nitro configuration for sitemap dynamic routes
+  // Nitro configuration. We deliberately DON'T crawlLinks at build time —
+  // doing so makes /blog and /species fail when the API isn't reachable
+  // during the build, leaving them as Vercel-level 404s. Server-render
+  // them on demand instead.
   nitro: {
     prerender: {
-      crawlLinks: true,
+      crawlLinks: false,
       routes: ['/sitemap.xml'],
     },
   },
@@ -108,7 +111,11 @@ export default defineNuxtConfig({
   // Route rules for caching
   routeRules: {
     '/api/**': { cache: { maxAge: 60 } },
-    '/blog/**': { swr: 3600 },
-    '/species/**': { swr: 3600 },
+    // Render dynamic pages on demand (SSR), don't pre-generate.
+    // SWR previously caused 404s when the API was unavailable at build.
+    '/blog': { ssr: true },
+    '/blog/**': { ssr: true },
+    '/species': { ssr: true },
+    '/species/**': { ssr: true },
   },
 })

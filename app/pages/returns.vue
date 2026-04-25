@@ -1,165 +1,114 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import { RotateCcw, Calendar, CheckCircle, AlertCircle } from 'lucide-vue-next'
-import {useReturnsStore} from "~~/stores/Return";
+import PageHero from '~/components/common/PageHero.vue'
 
-const iconMap = {
-  RotateCcw,
-  Calendar,
-  CheckCircle,
-  AlertCircle
-}
+useSeoMeta({
+  title: 'Devoluciones — Vida en el Jardín',
+  description: 'Política de devoluciones: 30 días, garantía de planta viva.',
+})
 
-const returns = useReturnsStore()
+const steps = [
+  { n: '01', icon: Calendar, title: '30 días', body: 'Cuentas con 30 días naturales desde que recibes la planta para iniciar una devolución.' },
+  { n: '02', icon: AlertCircle, title: 'Avísanos', body: 'Mándanos una foto y descripción del problema. Diagnosticamos en 24h.' },
+  { n: '03', icon: RotateCcw, title: 'Recolección', body: 'Coordinamos la recolección sin costo en CDMX y zonas con cobertura.' },
+  { n: '04', icon: CheckCircle, title: 'Reembolso', body: 'Reembolso en 5–7 días hábiles a tu método de pago original.' },
+]
 
+const eligible = [
+  'La planta llegó dañada o muerta',
+  'Llegó una especie distinta a la pedida',
+  'La maceta o accesorios incluidos están defectuosos',
+  'No coincide la talla / tamaño descrito',
+]
+
+const notEligible = [
+  'Plantas que murieron por cuidado posterior (riego excesivo, falta de luz, etc.)',
+  'Pedidos personalizados o de especies bajo encargo',
+  'Productos con más de 30 días desde la entrega',
+  'Plantas adquiridas en promociones de "planta de la semana"',
+]
 </script>
 
 <template>
-  <!-- Hero Section -->
-  <section class="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="max-w-3xl">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-white/20 backdrop-blur rounded-full flex items-center justify-center">
-            <RotateCcw class="w-6 h-6" />
+  <main class="relative min-h-screen">
+    <PageHero
+      eyebrow="Política"
+      title="Si algo sale"
+      italic="mal,"
+      trailing="lo arreglamos."
+      description="Plantas vivas son cosa frágil. Por eso ofrecemos 30 días de garantía y reposición sin preguntas si llega dañada."
+    />
+
+    <!-- Steps -->
+    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-20">
+      <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-12">El proceso</div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          v-for="(s, idx) in steps"
+          :key="s.n"
+          v-motion
+          :initial="{ opacity: 0, y: 30 }"
+          :visible-once="{ opacity: 1, y: 0, transition: { duration: 600, delay: idx * 100 } }"
+          class="group"
+        >
+          <div class="flex items-baseline gap-4 mb-6">
+            <span class="font-display text-terra text-5xl tracking-tighter">{{ s.n }}</span>
+            <component :is="s.icon" class="w-5 h-5 text-cream-40 group-hover:text-terra transition-colors duration-500" />
           </div>
-          <h1 class="text-5xl" style="font-family: serif;">Devoluciones</h1>
+          <h3 class="font-display text-cream text-2xl tracking-tighter mb-3">{{ s.title }}</h3>
+          <p class="text-cream-60 leading-relaxed">{{ s.body }}</p>
+          <div class="mt-6 h-px bg-line group-hover:bg-terra transition-colors duration-700" />
         </div>
-        <p class="text-xl text-blue-100">
-          Tu satisfacción es nuestra prioridad. Conoce nuestra política de devoluciones
-          y garantía de 30 días en todos nuestros productos.
-        </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Quick Info Cards -->
-  <section class="max-w-7xl mx-auto px-6 -mt-12 relative z-10 mb-16">
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white rounded-2xl p-6 shadow-xl">
-        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <Calendar class="w-6 h-6 text-blue-600" />
-        </div>
-        <h3 class="text-xl mb-2 text-gray-800">30 Días de Garantía</h3>
-        <p class="text-gray-600">
-          Tienes un mes completo para devolver cualquier planta que no cumpla tus expectativas
-        </p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-6 shadow-xl">
-        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
-          <RotateCcw class="w-6 h-6 text-green-600" />
-        </div>
-        <h3 class="text-xl mb-2 text-gray-800">Proceso Simple</h3>
-        <p class="text-gray-600">
-          Solo necesitas contactarnos y seguir 5 pasos sencillos para tu devolución
-        </p>
-      </div>
-
-      <div class="bg-white rounded-2xl p-6 shadow-xl">
-        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-          <CheckCircle class="w-6 h-6 text-purple-600" />
-        </div>
-        <h3 class="text-xl mb-2 text-gray-800">Reembolso Completo</h3>
-        <p class="text-gray-600">
-          Te devolvemos el 100% de tu dinero o cambiamos el producto sin costo
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Guarantee Reasons -->
-  <section class="max-w-7xl mx-auto px-6 mb-16">
-    <div class="mb-8">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
-        <h2 class="text-3xl text-gray-800" style="font-family: serif;">Garantía de Satisfacción</h2>
-      </div>
-      <p class="text-gray-600">
-        Puedes devolver o cambiar tu planta si se presenta alguna de estas situaciones:
-      </p>
-    </div>
-
-    <div class="grid md:grid-cols-2 gap-6">
-      <div v-for="(reason, index) in returns.guaranteeReasons" :key="index" class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <component :is="iconMap[reason.icon]" class="w-6 h-6 text-orange-600" />
+    <!-- Eligible vs Not -->
+    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-32">
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="p-8 lg:p-10 rounded-3xl bg-ink-card border border-line">
+          <div class="flex items-center gap-3 mb-6 text-moss-bright">
+            <CheckCircle class="w-5 h-5" />
+            <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">Aplica devolución</div>
           </div>
-          <div>
-            <h3 class="text-lg text-gray-800 mb-2">{{ reason.title }}</h3>
-            <p class="text-gray-600">{{ reason.description }}</p>
+          <ul class="space-y-4">
+            <li
+              v-for="(item, idx) in eligible"
+              :key="idx"
+              class="flex items-start gap-3 text-cream/90 leading-relaxed"
+            >
+              <span class="text-terra mt-1.5 flex-shrink-0">→</span>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-8 lg:p-10 rounded-3xl bg-ink-card border border-line">
+          <div class="flex items-center gap-3 mb-6 text-terra">
+            <AlertCircle class="w-5 h-5" />
+            <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">No aplica</div>
           </div>
+          <ul class="space-y-4">
+            <li
+              v-for="(item, idx) in notEligible"
+              :key="idx"
+              class="flex items-start gap-3 text-cream-60 leading-relaxed"
+            >
+              <span class="text-cream/30 mt-1.5 flex-shrink-0">×</span>
+              <span>{{ item }}</span>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
 
-    <div class="mt-8 bg-green-50 border border-green-200 rounded-2xl p-6">
-      <div class="flex items-start gap-3">
-        <CheckCircle class="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-        <div>
-          <p class="text-gray-800 mb-2">
-            <strong>Garantía inmediata:</strong> Si tu planta llegó dañada o enferma,
-            te la reemplazamos sin hacer preguntas.
-          </p>
-          <p class="text-gray-700">
-            Solo necesitamos fotos del producto dentro de las primeras 48 horas después de la entrega.
-          </p>
-        </div>
+      <div class="mt-12 text-center">
+        <NuxtLink
+          to="/contact"
+          class="inline-flex items-center gap-3 px-7 py-4 bg-terra text-ink rounded-full font-medium tracking-wide hover:bg-cream transition-colors duration-500 shine-on-hover"
+        >
+          Iniciar devolución
+          <span>→</span>
+        </NuxtLink>
       </div>
-    </div>
-  </section>
-
-  <!-- Return Process -->
-  <section class="bg-gradient-to-br from-blue-50 to-indigo-50 py-16 mb-16">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="mb-12 text-center">
-        <h2 class="text-3xl md:text-4xl mb-4 text-gray-800" style="font-family: serif;">Proceso de Devolución</h2>
-        <p class="text-gray-600 max-w-2xl mx-auto">
-          Sigue estos pasos para realizar una devolución exitosa
-        </p>
-      </div>
-
-      <div class="space-y-6">
-        <div v-for="(step, index) in returns.returnSteps" :key="index" class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow">
-          <div class="flex items-start gap-6">
-            <div class="flex flex-col items-center flex-shrink-0">
-              <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-xl mb-3">
-                {{ step.number }}
-              </div>
-              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                <component :is="iconMap[step.icon]" class="w-6 h-6 text-orange-600" />
-              </div>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-xl text-gray-800 mb-2">{{ step.title }}</h3>
-              <p class="text-gray-600 leading-relaxed">{{ step.description }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Conditions -->
-  <section class="max-w-7xl mx-auto px-6 mb-16">
-    <div class="mb-8">
-      <div class="flex items-center gap-2 mb-4">
-        <div class="w-1 h-8 bg-blue-600 rounded-full"></div>
-        <h2 class="text-3xl text-gray-800" style="font-family: serif;">Condiciones para Devoluciones</h2>
-      </div>
-      <p class="text-gray-600">
-        Para que tu devolución sea aceptada, debe cumplir con las siguientes condiciones:
-      </p>
-    </div>
-
-    <div class="bg-white rounded-2xl p-8 shadow-md">
-      <ul class="space-y-4">
-        <li v-for="(condition, index) in returns.conditions" :key="index" class="flex items-start gap-3">
-          <CheckCircle class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-          <span class="text-gray-700">{{ condition }}</span>
-        </li>
-      </ul>
-    </div>
-  </section>
+    </section>
+  </main>
 </template>
