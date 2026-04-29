@@ -36,23 +36,32 @@ const props = defineProps<BlogPost>()
         <div class="flex flex-wrap items-center gap-6 pb-6 border-b border-gray-200">
           <!-- Author -->
           <div class="flex items-center gap-3">
-            <img :src="props.author?.image" :alt="props.author?.name" class="w-12 h-12 rounded-full object-cover" @error="onImgError" />
+            <img
+              v-if="props.author?.avatar || props.author?.image"
+              :src="props.author?.avatar || props.author?.image"
+              :alt="props.author?.name"
+              class="w-12 h-12 rounded-full object-cover"
+              @error="onImgError"
+            />
+            <div v-else class="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center">
+              <span class="text-lg text-green-700 font-bold">{{ props.author?.name?.charAt(0) }}</span>
+            </div>
             <div>
               <p class="text-sm text-gray-500">Escrito por</p>
-              <p class="text-gray-800">{{ props.author.name }}</p>
+              <p class="text-gray-800">{{ props.author?.name }}</p>
             </div>
           </div>
 
           <!-- Date -->
-          <div class="flex items-center gap-2 text-gray-600">
+          <div v-if="props.publishedAt" class="flex items-center gap-2 text-gray-600">
             <Calendar class="w-4 h-4" />
-            <span class="text-sm">{{ props.createdAt }}</span>
+            <span class="text-sm">{{ new Date(props.publishedAt).toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' }) }}</span>
           </div>
 
           <!-- Read Time -->
-          <div class="flex items-center gap-2 text-gray-600">
+          <div v-if="props.readTime || props.readingTime" class="flex items-center gap-2 text-gray-600">
             <Clock class="w-4 h-4" />
-            <span class="text-sm">{{ props.readTime }} de lectura</span>
+            <span class="text-sm">{{ props.readTime || `${props.readingTime} min` }} de lectura</span>
           </div>
         </div>
 

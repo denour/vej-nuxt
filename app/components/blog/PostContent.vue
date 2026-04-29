@@ -51,9 +51,9 @@ function joinUrl(base: string, path: string) {
       </p>
 
       <!-- Image -->
-      <figure v-else-if="block.type === 'image'" class="my-10">
+      <figure v-else-if="block.type === 'image' && block.data?.url" class="my-10">
         <img
-            :src="`${block.data.url}`"
+            :src="block.data.url"
             :alt="block.data.caption || ''"
             class="w-full rounded-2xl shadow-lg"
         />
@@ -66,7 +66,7 @@ function joinUrl(base: string, path: string) {
       </figure>
 
       <!-- List -->
-      <ul v-else-if="block.type === 'list'" class="space-y-3 my-6 ml-6">
+      <ul v-else-if="block.type === 'list' && block.data?.items?.length" class="space-y-3 my-6 ml-6">
         <li
             v-for="(item, i) in block.data.items"
             :key="i"

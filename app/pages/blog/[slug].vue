@@ -110,8 +110,8 @@ const handleSubscribe = async () => {
         </article>
 
         <AuthorBio
-          v-if="post"
-          :thumbnail="post.author.thumbnail || post.author.image || ''"
+          v-if="post?.author"
+          :thumbnail="post.author.avatar || post.author.image || post.author.thumbnail || ''"
           :name="post.author.name"
           :description="post.author.description || ''"
         />
