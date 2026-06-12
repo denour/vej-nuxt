@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Droplets, Sun, ArrowUpRight, AlertTriangle } from 'lucide-vue-next'
+import { NuxtLink } from '#components'
 import { onImgError } from '~~/utils/image'
 import type { Species } from '~~/models/Species'
 
@@ -26,7 +27,9 @@ const isToxic = (toxicity?: string) =>
 </script>
 
 <template>
-  <article
+  <component
+    :is="species.slug ? NuxtLink : 'article'"
+    :to="species.slug ? `/species/${species.slug}` : undefined"
     v-motion
     :initial="{ opacity: 0, y: 30 }"
     :visible-once="{
@@ -110,5 +113,5 @@ const isToxic = (toxicity?: string) =>
         {{ species.family }}
       </div>
     </div>
-  </article>
+  </component>
 </template>

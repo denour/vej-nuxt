@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { Search, X } from 'lucide-vue-next'
 import SpeciesCard from "~/components/common/SpeciesCard.vue";
 import { useSpeciesStore } from "~~/stores/Species";
@@ -22,12 +22,9 @@ const wateringLevels = ['Todas', 'Bajo', 'Medio', 'Alto']
 
 const speciesData = useSpeciesStore()
 
-onMounted(async () => {
-  try {
-    await speciesData.fetchSpecies()
-  } catch (e) {
-    // API may not be available locally — fall through to empty state
-  }
+await useAsyncData('species-list', async () => {
+  await speciesData.fetchSpecies()
+  return true
 })
 
 const difficultyMap: Record<string, string> = {

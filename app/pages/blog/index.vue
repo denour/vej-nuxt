@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Search, X } from 'lucide-vue-next'
 import { usePostsStore } from "~~/stores/BlogPost"
 
@@ -19,10 +19,9 @@ watch(searchQuery, (q) => {
   searchTimer = setTimeout(() => posts.fetchPosts({ q }), 300)
 })
 
-onMounted(async () => {
-  try {
-    await posts.fetchPosts()
-  } catch (e) { /* graceful — falls back to mocks */ }
+await useAsyncData('blog-posts', async () => {
+  await posts.fetchPosts()
+  return true
 })
 
 const featured = computed(() => posts.featuredPost)

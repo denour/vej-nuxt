@@ -2,6 +2,7 @@ export interface Species {
     id: string;
 
     // Identidad básica
+    slug?: string;                // Ej: "ficus-lyrata"
     commonName: string;           // Ej: "Ficus Lyrata"
     scientificName: string;       // Ej: "Ficus lyrata"
     family?: string;              // Ej: "Moraceae"

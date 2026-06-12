@@ -23,6 +23,7 @@ function augmentPost(p: BlogPost): BlogPost {
   const minutes = Math.max(1, calculateReadingTime(textBase))
   return {
     ...p,
+    image: (p as any).image ?? p.coverImage ?? null,
     readTime: `${minutes} min`,
     readingTime: minutes,
   }

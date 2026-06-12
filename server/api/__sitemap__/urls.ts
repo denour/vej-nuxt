@@ -25,11 +25,12 @@ export default defineSitemapEventHandler(async () => {
 
   try {
     // Fetch species
-    const speciesRes = await $fetch<{ data: Array<{ id: string; updated_at: string }> }>(`${apiBase}/species?per_page=100`)
+    const speciesRes = await $fetch<{ data: Array<{ slug?: string; updated_at: string }> }>(`${apiBase}/species?per_page=100`)
     if (speciesRes?.data) {
       for (const species of speciesRes.data) {
+        if (!species.slug) continue
         urls.push({
-          loc: `/species/${species.id}`,
+          loc: `/species/${species.slug}`,
           lastmod: species.updated_at,
           changefreq: 'monthly',
           priority: 0.7,

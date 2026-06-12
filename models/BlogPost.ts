@@ -5,6 +5,7 @@ export interface BlogPost {
     excerpt: string
     content: ContentBlock[]
     coverImage?: string
+    image?: string | null
     category: string
     tags: string[]
     author: {
