@@ -92,6 +92,9 @@ body::before {
 .bg-terra { background: var(--terra); }
 .bg-cream { background: var(--cream); }
 
+/* Decorative footer watermark — text lives in ::before so a11y tools don't flag its (intentional) low contrast */
+.footer-watermark::before { content: 'VIDA EN EL JARDÍN'; }
+
 .border-line { border-color: var(--line); }
 
 /* Shine animation for CTAs */

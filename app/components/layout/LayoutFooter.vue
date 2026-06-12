@@ -104,9 +104,7 @@ const sections = [
 
     <!-- Mega watermark -->
     <div class="mt-20 overflow-hidden pointer-events-none" aria-hidden="true">
-      <div class="font-display text-cream/[0.03] text-[20vw] leading-none tracking-tighter whitespace-nowrap text-center">
-        VIDA EN EL JARDÍN
-      </div>
+      <div class="footer-watermark font-display text-cream/[0.03] text-[20vw] leading-none tracking-tighter whitespace-nowrap text-center" />
     </div>
   </footer>
 </template>
