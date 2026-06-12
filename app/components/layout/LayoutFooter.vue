@@ -103,7 +103,7 @@ const sections = [
     </div>
 
     <!-- Mega watermark -->
-    <div class="mt-20 overflow-hidden pointer-events-none">
+    <div class="mt-20 overflow-hidden pointer-events-none" aria-hidden="true">
       <div class="font-display text-cream/[0.03] text-[20vw] leading-none tracking-tighter whitespace-nowrap text-center">
         VIDA EN EL JARDÍN
       </div>
