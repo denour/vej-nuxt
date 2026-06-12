@@ -89,9 +89,12 @@ const levelLabel = (level?: string): string =>
             class="lg:col-span-6"
           >
             <div class="relative aspect-[4/5] rounded-3xl overflow-hidden border border-line bg-ink-card">
-              <img
+              <NuxtImg
                 :src="species.image"
                 :alt="species.commonName"
+                sizes="xs:100vw lg:700px"
+                fetchpriority="high"
+                preload
                 class="absolute inset-0 w-full h-full object-cover duotone"
                 @error="onImgError"
               />

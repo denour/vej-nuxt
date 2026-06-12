@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     },
     // For Vercel deployment
     provider: 'vercel',
+    domains: ['fls-a09b6ba4-6ef8-4244-98fc-cf1816207249.laravel.cloud'],
   },
 
   // SEO defaults

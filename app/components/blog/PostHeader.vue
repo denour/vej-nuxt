@@ -10,7 +10,7 @@ const props = defineProps<BlogPost>()
   <div class="relative">
     <!-- Hero Image -->
     <div class="relative h-[500px] w-full bg-gradient-to-br from-gray-100 to-green-50 overflow-hidden">
-      <img :src="props.coverImage" :alt="props.title" class="w-full h-full object-cover" @error="onImgError" />
+      <NuxtImg :src="props.coverImage" :alt="props.title" sizes="xs:100vw xl:1536px" fetchpriority="high" preload class="w-full h-full object-cover" @error="onImgError" />
       <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
 
       <!-- Category Badge -->

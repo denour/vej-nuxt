@@ -80,7 +80,7 @@ body::before {
 /* Utility: cream text with opacity */
 .text-cream { color: var(--cream); }
 .text-cream-60 { color: rgba(245, 239, 228, 0.6); }
-.text-cream-40 { color: rgba(245, 239, 228, 0.4); }
+.text-cream-40 { color: rgba(245, 239, 228, 0.58); }
 .text-terra { color: var(--terra); }
 .text-amber-brand { color: var(--amber); }
 .text-moss-bright { color: var(--moss-bright); }

@@ -103,9 +103,11 @@ const formatDate = (d?: string) => {
         :visible-once="{ opacity: 1, y: 0, transition: { duration: 800 } }"
         class="group block relative aspect-[16/9] lg:aspect-[21/9] rounded-3xl overflow-hidden border border-line"
       >
-        <img
+        <NuxtImg
           :src="(featured as any).image"
           :alt="featured.title"
+          sizes="xs:100vw lg:1336px"
+          fetchpriority="high"
           class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-105"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
@@ -152,10 +154,11 @@ const formatDate = (d?: string) => {
           class="group block"
         >
           <div class="relative aspect-[4/5] rounded-2xl overflow-hidden mb-6 bg-ink-card">
-            <img
+            <NuxtImg
               :src="(post as any).image"
               :alt="post.title"
               loading="lazy"
+              sizes="xs:100vw sm:50vw lg:430px"
               class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
             />
             <div class="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />

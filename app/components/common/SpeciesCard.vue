@@ -40,10 +40,11 @@ const isToxic = (toxicity?: string) =>
   >
     <!-- Image area -->
     <div class="relative aspect-[4/5] overflow-hidden">
-      <img
+      <NuxtImg
         :src="species.image"
         :alt="species.commonName"
         loading="lazy"
+        sizes="xs:100vw sm:50vw lg:430px"
         class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
         @error="onImgError"
       />
@@ -76,9 +77,9 @@ const isToxic = (toxicity?: string) =>
         <div class="text-cream-40 text-[10px] tracking-[0.25em] uppercase mb-1.5">
           {{ species.scientificName }}
         </div>
-        <h3 class="font-display text-cream text-2xl tracking-tighter leading-tight">
+        <h2 class="font-display text-cream text-2xl tracking-tighter leading-tight">
           {{ species.commonName }}
-        </h3>
+        </h2>
       </div>
     </div>
 

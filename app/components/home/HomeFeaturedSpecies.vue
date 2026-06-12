@@ -86,9 +86,10 @@ const species: Species[] = [
           s.span,
         ]"
       >
-        <img
+        <NuxtImg
           :src="s.image"
           :alt="s.name"
+          sizes="xs:100vw md:50vw lg:700px"
           class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-105"
           loading="lazy"
         />

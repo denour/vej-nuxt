@@ -43,12 +43,17 @@ const sections = [
 
         <div class="mt-10 flex items-center gap-4">
           <a
-            v-for="(Icon, i) in [Instagram, Twitter, Youtube]"
+            v-for="(social, i) in [
+              { icon: Instagram, label: 'Instagram' },
+              { icon: Twitter, label: 'Twitter' },
+              { icon: Youtube, label: 'YouTube' },
+            ]"
             :key="i"
             href="#"
+            :aria-label="social.label"
             class="w-11 h-11 rounded-full border border-cream/20 flex items-center justify-center text-cream-60 hover:bg-terra hover:border-terra hover:text-ink transition-all duration-500"
           >
-            <component :is="Icon" class="w-4 h-4" />
+            <component :is="social.icon" class="w-4 h-4" />
           </a>
         </div>
       </div>

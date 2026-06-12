@@ -48,10 +48,11 @@ const formatDate = (d?: string) => {
         class="group block"
       >
         <div class="relative aspect-[4/5] rounded-2xl overflow-hidden mb-6 bg-ink-card">
-          <img
+          <NuxtImg
             :src="(post as any).image"
             :alt="post.title"
             loading="lazy"
+            sizes="xs:100vw sm:50vw lg:430px"
             class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-110"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-ink/40 to-transparent" />
