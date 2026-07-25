@@ -34,9 +34,8 @@ const close = () => (mobileMenuOpen.value = false)
     <div class="max-w-[1400px] mx-auto px-6 lg:px-12 flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink to="/" class="flex items-center gap-3 group" @click="close">
-        <div class="w-9 h-9 rounded-full border border-cream/40 group-hover:border-terra flex items-center justify-center transition-colors duration-500 ease-out-quint">
-          <span class="font-display text-cream text-lg leading-none">v</span>
-        </div>
+        <img src="/brand-mark.png" alt="Vida en el Jardín" width="36" height="36" class="w-9 h-9 select-none transition-opacity duration-500 group-hover:opacity-80">
+
         <span class="font-display text-cream text-lg tracking-tightest hidden sm:block">
           Vida en el Jardín
         </span>

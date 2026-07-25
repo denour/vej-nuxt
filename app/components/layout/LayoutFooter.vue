@@ -31,9 +31,8 @@ const sections = [
       <!-- Brand -->
       <div class="lg:col-span-5">
         <div class="flex items-center gap-3 mb-8">
-          <div class="w-10 h-10 rounded-full border border-cream/40 flex items-center justify-center">
-            <span class="font-display text-cream text-xl leading-none">v</span>
-          </div>
+          <img src="/brand-mark.png" alt="Vida en el Jardín" width="40" height="40" class="w-10 h-10 select-none">
+
           <span class="font-display text-cream text-2xl tracking-tightest">Vida en el Jardín</span>
         </div>
         <p class="text-cream-60 text-lg leading-relaxed max-w-md">
