@@ -101,7 +101,7 @@ const formatDate = (d?: string) => {
         v-motion
         :initial="{ opacity: 0, y: 30 }"
         :visible-once="{ opacity: 1, y: 0, transition: { duration: 800 } }"
-        class="group block relative aspect-[16/9] lg:aspect-[21/9] rounded-3xl overflow-hidden border border-line"
+        class="group block relative lg:aspect-[21/9] rounded-3xl overflow-hidden border border-line"
       >
         <NuxtImg
           :src="(featured as any).image"
@@ -111,7 +111,7 @@ const formatDate = (d?: string) => {
           class="absolute inset-0 w-full h-full object-cover duotone transition-transform duration-700 ease-out-quint group-hover:scale-105"
         />
         <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/40 to-transparent" />
-        <div class="absolute bottom-0 left-0 right-0 p-8 lg:p-14">
+        <div class="relative lg:absolute bottom-0 left-0 right-0 p-8 lg:p-14">
           <span class="px-3 py-1 bg-cream/15 backdrop-blur border border-cream/20 rounded-full text-cream text-[10px] tracking-[0.25em] uppercase">
             {{ (featured as any).category || 'Featured' }}
           </span>
