@@ -1,0 +1,14 @@
+{
+  "id": "muestrario",
+  "sources": ["pothos-la-planta-perfecta-para-principiante"],
+  "category": "Muestrario",
+  "title": { "text": "Escenarios del kit", "keyword": "kit", "tone": "dark", "plate": true },
+  "style": { "setting": "pared", "framing": "fijo", "light": "dorada", "structure": "ritual", "transitions": ["fundido"], "music": { "seed": 1 } },
+  "lines": [
+    { "text": "Ventana con monstera a la hora dorada. Balcón por la mañana con tomatera en jardinera." },
+    { "text": "Jardín con helecho. Mesa de trabajo con suculenta, palita y estaca." },
+    { "text": "Cocina con albahaca y frasco. Invernadero nublado con cactus." },
+    { "text": "Corte bajo tierra con lombriz. Macro nocturno de una hoja de monstera." }
+  ],
+  "scene": "scene.js"
+}

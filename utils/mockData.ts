@@ -79,15 +79,12 @@ export const mockPosts: BlogPost[] = [
 ]
 
 export const mockFaqs: any[] = [
-  { id: 'f1', category: 'Pedidos', question: '¿Cómo hago un pedido?', answer: 'Selecciona tu planta, agrégala al carrito y procede al checkout. Aceptamos tarjeta, transferencia y OXXO.' },
-  { id: 'f2', category: 'Pedidos', question: '¿Puedo modificar mi pedido después de hacerlo?', answer: 'Sí, dentro de las primeras 4 horas. Después se prepara para envío y ya no se puede cambiar.' },
-  { id: 'f3', category: 'Envíos', question: '¿Cuánto tarda mi envío?', answer: 'CDMX: 24-48h. Resto del país: 3-5 días. Foráneo: 5-8 días.' },
-  { id: 'f4', category: 'Envíos', question: '¿Hacen envíos internacionales?', answer: 'Por ahora solo dentro de México. Pronto vendrán envíos a EUA y Centroamérica.' },
-  { id: 'f5', category: 'Pagos', question: '¿Qué métodos de pago aceptan?', answer: 'Tarjetas (Visa, Mastercard, AMEX), transferencia SPEI, OXXO, PayPal y Mercado Pago.' },
-  { id: 'f6', category: 'Pagos', question: '¿Es seguro pagar con tarjeta en su sitio?', answer: 'Sí. Usamos Stripe — tus datos nunca tocan nuestros servidores. Cumplimos PCI DSS.' },
+  { id: 'f1', category: 'Tienda', question: '¿Ya puedo comprar plantas en el sitio?', answer: 'Todavía no. La tienda está en germinación: por ahora no vendemos, no aceptamos pagos ni hacemos envíos. Cuando abramos publicaremos los términos de venta y las políticas de envío y devolución.' },
+  { id: 'f2', category: 'Tienda', question: '¿Cómo me entero cuando abra la tienda?', answer: 'Suscríbete al newsletter o síguenos en el blog. Lo anunciaremos ahí antes de aceptar el primer pedido.' },
+  { id: 'f3', category: 'Privacidad', question: '¿Qué hacen con mis datos?', answer: 'Solo usamos tu nombre y correo para responder tus mensajes y, si te suscribes, para enviarte el newsletter. Todos los detalles están en nuestro Aviso de privacidad (/privacidad).' },
+  { id: 'f4', category: 'Privacidad', question: '¿Cómo me doy de baja del newsletter?', answer: 'Con el enlace que viene al final de cada correo, o escribiendo a privacidad@vidaeneljardin.com.' },
   { id: 'f7', category: 'Plantas', question: '¿Cómo sé qué planta es para mí?', answer: 'Filtramos por dificultad, luz y riego en /species. También respondemos por contacto si necesitas ayuda.' },
-  { id: 'f8', category: 'Plantas', question: '¿Qué hago si mi planta llega marchita?', answer: 'Mándanos foto en las primeras 48h. Si fue daño en envío, te mandamos otra sin costo.' },
-  { id: 'f9', category: 'Plantas', question: '¿Las plantas son tóxicas para mascotas?', answer: 'Cada ficha de especie indica toxicidad. Filtra por "no tóxica" si tienes pets.' },
+  { id: 'f9', category: 'Plantas', question: '¿Las plantas son tóxicas para mascotas?', answer: 'Cada ficha de especie indica toxicidad. Filtra por "no tóxica" si tienes mascotas, y ante cualquier duda consulta a tu veterinario.' },
 ]
 
 export const mockSpecies: Species[] = [

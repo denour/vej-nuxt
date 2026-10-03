@@ -1,0 +1,69 @@
+[
+ {
+  "id": "bancales-proto",
+  "date": "2026-09-29",
+  "sources": [
+   "bancales-elevados-con-reciclados-jardines-accesibles"
+  ],
+  "setting": "pared",
+  "framing": "frontal abierto, acercamiento lento",
+  "light": "dorada",
+  "structure": "ritual",
+  "transition": "fundido",
+  "music": {
+   "key": "F",
+   "tempo": 72,
+   "lead": "rhodes",
+   "prog": "ii-V-I-VI",
+   "pattern": "A",
+   "drums": "escobillas",
+   "seed": 20260929
+  },
+  "duration": 25.0
+ },
+ {
+  "id": "pothos-noche",
+  "date": "2026-09-30",
+  "sources": [
+   "pothos-la-planta-perfecta-para-principiante"
+  ],
+  "setting": "cocina",
+  "framing": "travelling lateral → primer plano → zoom lento a la raíz",
+  "light": "noche",
+  "structure": "planta-cuenta",
+  "transition": "hoja, match, fundido",
+  "music": {
+   "key": "D",
+   "tempo": 70,
+   "lead": "vibrafono",
+   "prog": "I-IV-iii-VI",
+   "pattern": "sostenido",
+   "drums": "rim",
+   "seed": 21
+  },
+  "duration": 27.09
+ },
+ {
+  "id": "plagas-lluvia",
+  "date": "2026-09-30",
+  "sources": [
+   "como-manejar-plagas-en-huertos-urbanos-sin-quimicos",
+   "identifica-plagas-urbanas-y-aplica-soluciones-rapidas"
+  ],
+  "setting": "balcon",
+  "framing": "plano abierto del balcón → macro del envés con zoom → abierto otra vez",
+  "light": "nublado",
+  "structure": "error-solucion",
+  "transition": "lluvia, fundido, tierra",
+  "music": {
+   "key": "A",
+   "tempo": 80,
+   "lead": "nylon",
+   "prog": "IV-iii-ii-V",
+   "pattern": "arpegio",
+   "drums": "escobillas",
+   "seed": 33
+  },
+  "duration": 28.27
+ }
+]

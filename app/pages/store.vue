@@ -6,7 +6,7 @@ import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
   title: 'Tienda — Vida en el Jardín',
-  description: 'Plantas curadas, listas para su nuevo hogar. Envío en empaque botánico con garantía de llegada.',
+  description: 'Nuestra tienda de plantas curadas está en germinación. Todavía no vendemos; suscríbete para enterarte cuando abramos.',
 })
 
 const products = useProductsStore()
@@ -16,9 +16,9 @@ onMounted(async () => {
 })
 
 const features = [
-  { icon: Package, title: 'Empaque botánico', body: 'Diseñado para que lleguen vivas y firmes.' },
-  { icon: Truck, title: 'Envío 24-48h', body: 'En CDMX y zona metropolitana.' },
-  { icon: ShieldCheck, title: 'Garantía 30 días', body: 'Reposición sin preguntas si llega dañada.' },
+  { icon: Package, title: 'Empaque botánico', body: 'Lo estamos diseñando para que lleguen vivas y firmes.' },
+  { icon: Truck, title: 'Envíos, pronto', body: 'Publicaremos zonas, tiempos y costos antes de abrir.' },
+  { icon: ShieldCheck, title: 'Reglas claras', body: 'Términos de venta y devoluciones, antes del primer pedido.' },
 ]
 </script>
 
@@ -29,7 +29,7 @@ const features = [
       title="Plantas listas"
       italic="para su"
       trailing="nuevo hogar."
-      description="Curadas a mano, empacadas con cuidado y enviadas con garantía de llegada. Cada una viene con su ficha de cuidado."
+      description="Curadas a mano y con su ficha de cuidado. La tienda está en germinación: todavía no vendemos, pero ya casi."
     />
 
     <!-- Trust strip -->

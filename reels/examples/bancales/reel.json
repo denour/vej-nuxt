@@ -1,0 +1,19 @@
+{
+  "id": "bancales-ejemplo",
+  "sources": ["bancales-elevados-con-reciclados-jardines-accesibles"],
+  "category": "Huerto urbano",
+  "title": { "text": "Mis bancales con materiales reciclados", "keyword": "reciclados", "tone": "dark" },
+  "style": {
+    "setting": "pared", "framing": "frontal abierto, acercamiento lento", "light": "dorada", "structure": "ritual",
+    "transitions": ["fundido"],
+    "music": { "key": "F", "tempo": 72, "lead": "rhodes", "prog": "ii-V-I-VI", "pattern": "A", "drums": "escobillas", "seed": 20260929 }
+  },
+  "voice": { "voice": "EsMX_Latam_F1.wav", "format": "wav", "exaggeration": 0.4, "cfg_weight": 0.3, "temperature": 0.7, "seed": 3000 },
+  "lines": [
+    { "text": "Te cuento cómo armo mis bancales." },
+    { "text": "Una tarima vieja… unos cajones… y listo, ya tengo la base." },
+    { "text": "Primero van ramas. Luego composta. Y arriba, tierra buena." },
+    { "text": "Así, a la altura de la cintura. Sin dolor de espalda." }
+  ],
+  "scene": "scene.js"
+}

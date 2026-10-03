@@ -1,0 +1,22 @@
+{
+  "id": "pothos-noche",
+  "sources": ["pothos-la-planta-perfecta-para-principiante"],
+  "category": "Consejos",
+  "title": { "text": "Lo que tu pothos quiere decirte", "keyword": "pothos", "tone": "light" },
+  "style": {
+    "setting": "cocina",
+    "framing": "travelling lateral → primer plano → zoom lento a la raíz",
+    "light": "noche",
+    "structure": "planta-cuenta",
+    "transitions": ["hoja", "match", "fundido"],
+    "music": { "key": "D", "tempo": 70, "lead": "vibrafono", "prog": "I-IV-iii-VI", "drums": "rim", "seed": 21 }
+  },
+  "voice": { "voice": "EsMX_Latam_F1.wav", "format": "wav", "exaggeration": 0.4, "cfg_weight": 0.3, "temperature": 0.7, "seed": 3000 },
+  "lines": [
+    { "text": "Soy el pothos de tu cocina. Me basta la luz que llega de lado." },
+    { "text": "No me ahogues… riégame cuando la tierra ya esté casi seca." },
+    { "text": "Y si quieres más de mí, corta un tallo con cuatro hojas y déjalo en agua." },
+    { "text": "En unas semanas verás raíces nuevas. Y yo seguiré cayendo, hoja tras hoja." }
+  ],
+  "scene": "scene.js"
+}

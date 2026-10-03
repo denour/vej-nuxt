@@ -4,7 +4,7 @@ import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
   title: 'Contacto — Vida en el Jardín',
-  description: 'Escríbenos sobre cuidado de plantas, pedidos especiales o colaboraciones.',
+  description: 'Escríbenos sobre cuidado de plantas o colaboraciones.',
 })
 
 const form = ref({ name: '', email: '', subject: '', message: '' })
@@ -31,7 +31,7 @@ const submit = async (e: Event) => {
       title="Escríbenos."
       italic="Tomamos el tiempo"
       trailing="de responder bien."
-      description="Para dudas de cuidado, pedidos especiales, colaboraciones, o solo para platicar de plantas. Contestamos en menos de 24h."
+      description="Para dudas de cuidado, colaboraciones, o solo para platicar de plantas. Contestamos en menos de 24h."
     />
 
     <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-32">
@@ -89,6 +89,10 @@ const submit = async (e: Event) => {
             <span v-else-if="submitting">Enviando...</span>
             <span v-else>Enviar mensaje</span>
           </button>
+          <p class="text-cream-40 text-xs tracking-wide leading-relaxed">
+            Al enviar aceptas nuestro
+            <NuxtLink to="/privacidad" class="underline underline-offset-4 hover:text-cream transition-colors">Aviso de privacidad</NuxtLink>.
+          </p>
         </form>
 
         <!-- Info -->

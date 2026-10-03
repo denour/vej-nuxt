@@ -1,0 +1,22 @@
+{
+  "id": "plagas-lluvia",
+  "sources": ["como-manejar-plagas-en-huertos-urbanos-sin-quimicos", "identifica-plagas-urbanas-y-aplica-soluciones-rapidas"],
+  "category": "Huerto urbano",
+  "title": { "text": "Plagas fuera, sin químicos", "keyword": "sin químicos", "tone": "dark", "plate": true },
+  "style": {
+    "setting": "balcon",
+    "framing": "plano abierto del balcón → macro del envés con zoom → abierto otra vez",
+    "light": "nublado",
+    "structure": "error-solucion",
+    "transitions": ["lluvia", "fundido", "tierra"],
+    "music": { "key": "A", "tempo": 80, "lead": "nylon", "prog": "IV-iii-ii-V", "pattern": "arpegio", "drums": "escobillas", "seed": 33 }
+  },
+  "voice": { "voice": "EsMX_Latam_F1.wav", "format": "wav", "exaggeration": 0.4, "cfg_weight": 0.3, "temperature": 0.7, "seed": 3000 },
+  "lines": [
+    { "text": "Mi error fue esperar a ver la planta rendida para actuar." },
+    { "text": "Ahora, cada semana al amanecer, volteo las hojas y reviso el envés." },
+    { "text": "Si hay pulgón, rocío jabón suave en un día nublado… y repito cada cinco días." },
+    { "text": "Y cerca siembro flores y aromáticas. Las catarinas hacen el resto." }
+  ],
+  "scene": "scene.js"
+}

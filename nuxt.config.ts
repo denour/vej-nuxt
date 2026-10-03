@@ -121,5 +121,8 @@ export default defineNuxtConfig({
     '/blog/**': { ssr: true },
     '/species': { ssr: true },
     '/species/**': { ssr: true },
+    // Tienda aún cerrada: páginas placeholder con noindex, fuera del sitemap.
+    '/returns': { sitemap: false },
+    '/shipments': { sitemap: false },
   },
 })

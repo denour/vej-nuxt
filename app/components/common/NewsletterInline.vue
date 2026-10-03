@@ -1,18 +1,25 @@
 <template>
-  <div class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
-    <input
-      v-model="email"
-      type="email"
-      placeholder="Tu email"
-      class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
-    />
-    <button
-      :disabled="!email || loading"
-      @click="handleSubscribe"
-      class="px-8 py-4 bg-white text-green-600 rounded-full hover:bg-green-50 transition-all shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
-    >
-      {{ loading ? 'Enviando...' : 'Suscribirme' }}
-    </button>
+  <div>
+    <div class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+      <input
+        v-model="email"
+        type="email"
+        placeholder="Tu email"
+        class="flex-1 px-6 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-white"
+      />
+      <button
+        :disabled="!email || loading"
+        @click="handleSubscribe"
+        class="px-8 py-4 bg-white text-green-600 rounded-full hover:bg-green-50 transition-all shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        {{ loading ? 'Enviando...' : 'Suscribirme' }}
+      </button>
+    </div>
+    <p class="mt-4 text-sm text-green-100 text-center">
+      Al suscribirte aceptas nuestro
+      <NuxtLink to="/privacidad" class="underline underline-offset-4 hover:text-white">Aviso de privacidad</NuxtLink>;
+      puedes darte de baja cuando quieras.
+    </p>
   </div>
 </template>
 

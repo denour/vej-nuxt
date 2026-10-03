@@ -17,8 +17,6 @@ const sections = [
     title: 'Apoyo',
     links: [
       { name: 'Preguntas frecuentes', path: '/faq' },
-      { name: 'Envíos', path: '/shipments' },
-      { name: 'Devoluciones', path: '/returns' },
       { name: 'Contacto', path: '/contact' },
     ],
   },
@@ -96,8 +94,8 @@ const sections = [
         © {{ year }} Vida en el Jardín · Todos los derechos reservados
       </p>
       <div class="flex items-center gap-6 text-cream-40 text-xs tracking-wide">
-        <NuxtLink to="/" class="hover:text-cream transition-colors">Privacidad</NuxtLink>
-        <NuxtLink to="/" class="hover:text-cream transition-colors">Términos</NuxtLink>
+        <NuxtLink to="/privacidad" class="hover:text-cream transition-colors">Privacidad</NuxtLink>
+        <NuxtLink to="/terminos" class="hover:text-cream transition-colors">Términos</NuxtLink>
       </div>
     </div>
 

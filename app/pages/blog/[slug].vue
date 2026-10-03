@@ -148,6 +148,11 @@ const handleSubscribe = async () => {
           {{ loading ? 'Enviando...' : 'Suscribirme' }}
         </button>
       </div>
+      <p class="mt-4 text-sm text-green-100">
+        Al suscribirte aceptas nuestro
+        <NuxtLink to="/privacidad" class="underline underline-offset-4 hover:text-white">Aviso de privacidad</NuxtLink>;
+        puedes darte de baja cuando quieras.
+      </p>
     </div>
   </section>
 </template>

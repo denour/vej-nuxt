@@ -64,7 +64,9 @@ const submit = (e: Event) => {
               </button>
             </div>
             <p class="mt-4 text-cream-40 text-xs tracking-wide">
-              Al suscribirte aceptas recibir un correo a la semana. Cancela cuando quieras.
+              Al suscribirte aceptas recibir un correo a la semana y nuestro
+              <NuxtLink to="/privacidad" class="underline underline-offset-4 hover:text-cream transition-colors">Aviso de privacidad</NuxtLink>;
+              puedes darte de baja cuando quieras.
             </p>
           </form>
         </div>

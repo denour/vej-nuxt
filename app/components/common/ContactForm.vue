@@ -102,7 +102,8 @@
       </button>
 
       <p class="text-sm text-gray-500 text-center">
-        * Campos obligatorios
+        * Campos obligatorios · Al enviar aceptas nuestro
+        <NuxtLink to="/privacidad" class="underline underline-offset-2 hover:text-gray-700">Aviso de privacidad</NuxtLink>.
       </p>
     </form>
   </div>

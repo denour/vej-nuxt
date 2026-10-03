@@ -6,17 +6,21 @@ import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
   title: 'Preguntas Frecuentes — Vida en el Jardín',
-  description: 'Respuestas rápidas a dudas comunes sobre pedidos, envíos, pagos y cuidado de plantas.',
+  description: 'Respuestas rápidas a dudas comunes sobre cuidado de plantas, la tienda y tu privacidad.',
 })
 
 const searchQuery = ref('')
 const selectedCategory = ref('Todos')
 const openId = ref<string | null>(null)
 
-const categories = ['Todos', 'Pedidos', 'Envíos', 'Pagos', 'Plantas']
-
 const store = useFaqStore()
 const faqs = computed(() => store.allFaqs)
+
+// Categorías derivadas de los datos: evita pestañas vacías o de temas que ya no aplican.
+const categories = computed(() => [
+  'Todos',
+  ...Array.from(new Set(faqs.value.map(f => f.category).filter(Boolean) as string[])),
+])
 
 onMounted(async () => {
   try { await store.fetchFaqs() } catch (e) { /* falls back */ }
