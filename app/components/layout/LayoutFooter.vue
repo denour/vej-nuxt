@@ -87,6 +87,19 @@ const sections = [
           <br />
           9:00 — 18:00 hrs
         </p>
+        <div class="mt-5 flex flex-col items-start gap-2 text-sm">
+          <a href="tel:+526686088669" class="text-cream/80 hover:text-terra transition-colors">
+            +52 668 608 8669
+          </a>
+          <a
+            href="https://wa.me/526686088669"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-cream/80 hover:text-terra transition-colors"
+          >
+            WhatsApp
+          </a>
+        </div>
       </div>
     </div>
 
