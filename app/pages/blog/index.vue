@@ -4,7 +4,7 @@ import { Search, X } from 'lucide-vue-next'
 import { usePostsStore } from "~~/stores/BlogPost"
 
 useSeoMeta({
-  title: 'Blog — Vida en el Jardín',
+  title: 'Blog',
   description: 'Ensayos botánicos, guías de cuidado y notas para cultivadores curiosos. Escrito por jardineros, no por algoritmos.',
   ogTitle: 'Blog — Vida en el Jardín',
   ogDescription: 'Ensayos botánicos y guías de jardinería para cultivadores curiosos.',

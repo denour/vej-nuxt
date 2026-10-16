@@ -4,8 +4,8 @@ defineProps<{
   image: string;
   name: string;
   scientificName: string;
-  rating: number;
-  reviews: number;
+  rating?: number;
+  reviews?: number;
   price: number;
   inStock: boolean;
 }>();
@@ -44,7 +44,7 @@ defineProps<{
         </div>
 
         <!-- Rating -->
-        <div class="flex items-center gap-1 mb-4">
+        <div v-if="rating" class="flex items-center gap-1 mb-4">
           <Star
               v-for="i in 5"
               :key="i"

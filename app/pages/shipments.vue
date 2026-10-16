@@ -3,7 +3,7 @@ import { Truck, Package, Globe, Shield } from 'lucide-vue-next'
 import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
-  title: 'Envíos — Vida en el Jardín',
+  title: 'Envíos',
   description: 'Información sobre envíos, tiempos de entrega y zonas de cobertura.',
 })
 

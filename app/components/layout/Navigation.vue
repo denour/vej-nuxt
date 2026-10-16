@@ -5,11 +5,13 @@ import { Menu, X } from 'lucide-vue-next'
 const mobileMenuOpen = ref(false)
 const scrolled = ref(false)
 
+const storeEnabled = useRuntimeConfig().public.storeEnabled
+
 const navigationLinks = [
   { name: 'Inicio', path: '/' },
   { name: 'Especies', path: '/species' },
   { name: 'Blog', path: '/blog' },
-  { name: 'Tienda', path: '/store' },
+  ...(storeEnabled ? [{ name: 'Tienda', path: '/store' }] : []),
   { name: 'Contacto', path: '/contact' },
 ]
 
@@ -55,6 +57,7 @@ const close = () => (mobileMenuOpen.value = false)
 
       <!-- CTA -->
       <NuxtLink
+        v-if="storeEnabled"
         to="/store"
         class="hidden md:inline-flex items-center gap-2 px-5 py-2.5 bg-terra text-ink rounded-full text-sm font-medium hover:bg-cream transition-colors duration-300 shine-on-hover"
       >

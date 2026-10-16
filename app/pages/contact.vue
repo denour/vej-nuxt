@@ -5,7 +5,7 @@ import { useCaptcha } from '~~/composables/useCaptcha'
 import { submitContact } from '~~/services/contact'
 
 useSeoMeta({
-  title: 'Contacto — Vida en el Jardín',
+  title: 'Contacto',
   description: 'Escríbenos sobre cuidado de plantas, pedidos especiales o colaboraciones.',
 })
 

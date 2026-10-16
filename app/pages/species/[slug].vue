@@ -22,7 +22,7 @@ const config = useRuntimeConfig()
 const canonicalUrl = computed(() => `${config.public.siteUrl}/species/${slug}`)
 
 useSeoMeta({
-  title: () => species.value ? `${species.value.commonName} — Vida en el Jardín` : 'Especie',
+  title: () => species.value ? `${species.value.commonName}` : 'Especie',
   description: () => species.value?.description?.slice(0, 160) || 'Ficha botánica con cuidados de luz, riego y carácter.',
   ogTitle: () => species.value?.commonName || 'Especie | Vida en el Jardín',
   ogDescription: () => species.value?.description?.slice(0, 160) || 'Ficha botánica',

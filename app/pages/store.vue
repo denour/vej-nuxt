@@ -4,8 +4,12 @@ import { ArrowUpRight, Package, ShieldCheck, Truck } from 'lucide-vue-next'
 import { useProductsStore } from '~~/stores/Product'
 import PageHero from '~/components/common/PageHero.vue'
 
+if (!useRuntimeConfig().public.storeEnabled) {
+  throw createError({ statusCode: 404, statusMessage: 'Página no encontrada', fatal: true })
+}
+
 useSeoMeta({
-  title: 'Tienda — Vida en el Jardín',
+  title: 'Tienda',
   description: 'Plantas curadas, listas para su nuevo hogar. Envío en empaque botánico con garantía de llegada.',
 })
 

@@ -41,7 +41,7 @@ export default defineSitemapEventHandler(async () => {
     console.warn('Failed to fetch species for sitemap:', e)
   }
 
-  try {
+  if (config.public.storeEnabled) try {
     // Fetch products
     const productsRes = await $fetch<{ data: Array<{ id: string; updated_at: string }> }>(`${apiBase}/products?per_page=100`)
     if (productsRes?.data) {

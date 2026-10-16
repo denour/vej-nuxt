@@ -1,12 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+// Tienda oculta mientras no haya inventario real; se reactiva con STORE_ENABLED=true
+const storeEnabled = process.env.STORE_ENABLED === 'true'
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   
   app: {
     head: {
-      title: 'Vida En el Jardín',
-      titleTemplate: '%s | Vida En el Jardín',
+      title: 'Vida en el Jardín',
+      titleTemplate: '%s | Vida en el Jardín',
       htmlAttrs: { lang: 'es' },
       meta: [
         { charset: 'utf-8' },
@@ -25,7 +28,6 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png?v=2' },
         { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png?v=2' },
         { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png?v=2' },
-        { rel: 'canonical', href: process.env.SITE_URL || 'https://vidaeneljardin.com' },
       ]
     }
   },
@@ -53,6 +55,7 @@ export default defineNuxtConfig({
     sources: [
       '/api/__sitemap__/urls',
     ],
+    exclude: storeEnabled ? ['/tips'] : ['/store', '/store/**', '/tips'],
   },
 
   // Image optimization
@@ -75,7 +78,7 @@ export default defineNuxtConfig({
   // SEO defaults
   site: {
     url: process.env.SITE_URL || 'https://vidaeneljardin.com',
-    name: 'Vida En el Jardín',
+    name: 'Vida en el Jardín',
     description: 'Tu guía completa de plantas y jardinería',
     defaultLocale: 'es',
   },
@@ -86,6 +89,7 @@ export default defineNuxtConfig({
     public: {
       // Site URL for SEO
       siteUrl: process.env.SITE_URL || 'https://vidaeneljardin.com',
+      storeEnabled,
       // Base URL for Laravel API (can include /api/v1)
       apiBase: process.env.API_BASE || 'http://localhost/api/v1',
       // Base URL for serving files from Laravel (e.g. /storage)
@@ -119,5 +123,7 @@ export default defineNuxtConfig({
     '/blog/**': { ssr: true },
     '/species': { ssr: true },
     '/species/**': { ssr: true },
+    // /tips quedó absorbido por el blog
+    '/tips': { redirect: { to: '/blog', statusCode: 301 } },
   },
 })
