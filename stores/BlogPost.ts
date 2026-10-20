@@ -57,7 +57,7 @@ export const usePostsStore = defineStore('posts', {
     },
 
     async fetchPosts(opts: { force?: boolean; q?: string } = {}) {
-      if (!opts.force && withTTL(this.posts, this.lastFetchedAt, this.cacheTTLms) && (!opts.q || opts.q === this.currentQuery)) {
+      if (!opts.force && withTTL(this.posts, this.lastFetchedAt, this.cacheTTLms) && (opts.q || '') === this.currentQuery) {
         return
       }
       this.loading = true
