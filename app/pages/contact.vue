@@ -42,22 +42,44 @@ onBeforeUnmount(() => {
   if ((globalThis as any).vejTurnstileLoaded) delete (globalThis as any).vejTurnstileLoaded
 })
 
+const fallbackErrorMessage = 'No pudimos enviar tu mensaje. Intenta de nuevo.'
+
+// Laravel sends `errors: { campo: ['mensaje'] }`; show the text, never the array.
+const firstText = (value: unknown): string => {
+  if (Array.isArray(value)) return firstText(value[0])
+  return typeof value === 'string' ? value.trim() : ''
+}
+
+// ofetch's own message (`[POST] "https://…": 422 …`) is for logs, not for people.
+const humanText = (value: unknown) => {
+  const text = firstText(value)
+  return /^\[[A-Z]+\] /.test(text) ? '' : text
+}
+
 const messageFromError = (error: unknown) => {
   if (typeof error === 'object' && error !== null) {
     const responseError = error as {
-      data?: { error?: string; message?: string }
+      data?: { error?: unknown; errors?: unknown; message?: unknown }
       message?: string
       statusMessage?: string
     }
+    const data = typeof responseError.data === 'object' && responseError.data !== null
+      ? responseError.data
+      : {}
 
-    return responseError.data?.message
-      || responseError.data?.error
-      || responseError.statusMessage
-      || responseError.message
-      || 'No pudimos enviar tu mensaje. Intenta de nuevo.'
+    const fieldErrors = typeof data.errors === 'object' && data.errors !== null && !Array.isArray(data.errors)
+      ? Object.values(data.errors).map(firstText).filter(Boolean).join(' ')
+      : firstText(data.errors)
+
+    return fieldErrors
+      || humanText(data.message)
+      || humanText(data.error)
+      || humanText(responseError.statusMessage)
+      || humanText(responseError.message)
+      || fallbackErrorMessage
   }
 
-  return 'No pudimos enviar tu mensaje. Intenta de nuevo.'
+  return fallbackErrorMessage
 }
 
 const submit = async (e: Event) => {
