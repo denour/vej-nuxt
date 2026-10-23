@@ -1,32 +1,40 @@
 export function useCaptcha() {
   const config = useRuntimeConfig()
-  const provider = (config.public.captchaProvider as 'recaptcha' | 'hcaptcha') || 'recaptcha'
   const siteKey = config.public.captchaSiteKey
+  const token = ref('')
+  const widgetId = ref<string | undefined>()
 
-  async function getToken(action = 'submit') {
+  function render(container: HTMLElement) {
     if (!siteKey) return ''
 
-    if (provider === 'hcaptcha') {
-      const h = (globalThis as any).hcaptcha
-      if (!h || !h.execute) return ''
-      try {
-        const token = await h.execute(siteKey, { action })
-        return token as string
-      } catch {
-        return ''
-      }
-    }
+    const turnstile = (globalThis as any).turnstile
+    if (!turnstile?.render || widgetId.value !== undefined) return ''
 
-    // Default Google reCAPTCHA v3
-    const grecaptcha = (globalThis as any).grecaptcha
-    if (!grecaptcha || !grecaptcha.execute) return ''
     try {
-      const token = await grecaptcha.execute(siteKey, { action })
-      return token as string
+      widgetId.value = turnstile.render(container, {
+        sitekey: siteKey,
+        callback: (response: string) => { token.value = response },
+        'expired-callback': () => { token.value = '' },
+        'error-callback': () => { token.value = '' },
+      })
+      return widgetId.value
     } catch {
       return ''
     }
   }
 
-  return { getToken, provider, siteKey }
+  async function getToken(_action = 'submit') {
+    if (!siteKey) return ''
+
+    const turnstile = (globalThis as any).turnstile
+    return token.value || turnstile?.getResponse?.(widgetId.value) || ''
+  }
+
+  function reset() {
+    token.value = ''
+    const turnstile = (globalThis as any).turnstile
+    if (widgetId.value !== undefined) turnstile?.reset?.(widgetId.value)
+  }
+
+  return { enabled: Boolean(siteKey), getToken, render, reset, siteKey }
 }

@@ -29,8 +29,8 @@ export async function apiFetch<T = any>(path: string, opts: { method?: HttpMetho
   } catch (e: any) {
     // Normalize errors
     const statusCode = e?.response?.status || e?.statusCode || 500
-    const message = e?.data?.message || e?.message || 'Error en la solicitud'
-    throw createError({ statusCode, statusMessage: message })
+    const message = (typeof e?.data?.message === 'string' && e.data.message) || e?.message || 'Error en la solicitud'
+    throw createError({ statusCode, statusMessage: message, data: e?.data })
   }
 }
 

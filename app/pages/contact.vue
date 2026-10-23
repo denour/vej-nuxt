@@ -1,26 +1,106 @@
 <script setup lang="ts">
-import { Mail, MapPin, Clock, Send } from 'lucide-vue-next'
+import { Clock, Mail, MapPin, MessageCircle, Phone, Send } from 'lucide-vue-next'
 import PageHero from '~/components/common/PageHero.vue'
+import { useCaptcha } from '~~/composables/useCaptcha'
+import { submitContact } from '~~/services/contact'
 
 useSeoMeta({
   title: 'Contacto — Vida en el Jardín',
   description: 'Escríbenos sobre cuidado de plantas, pedidos especiales o colaboraciones.',
 })
 
-const form = ref({ name: '', email: '', subject: '', message: '' })
+const form = ref({ name: '', email: '', subject: '', message: '', website: '' })
 const submitting = ref(false)
 const success = ref(false)
+const errorMessage = ref('')
+const captchaContainer = ref<HTMLElement | null>(null)
+const { enabled: captchaEnabled, getToken, render: renderCaptcha, reset: resetCaptcha, siteKey } = useCaptcha()
+
+useHead(() => ({
+  script: siteKey
+    ? [{
+        key: 'cloudflare-turnstile',
+        src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=vejTurnstileLoaded&render=explicit',
+        async: true,
+        defer: true,
+      }]
+    : [],
+}))
+
+onMounted(() => {
+  if (!captchaEnabled) return
+
+  const mountCaptcha = () => {
+    if (captchaContainer.value) renderCaptcha(captchaContainer.value)
+  }
+
+  ;(globalThis as any).vejTurnstileLoaded = mountCaptcha
+  mountCaptcha()
+})
+
+onBeforeUnmount(() => {
+  if ((globalThis as any).vejTurnstileLoaded) delete (globalThis as any).vejTurnstileLoaded
+})
+
+const fallbackErrorMessage = 'No pudimos enviar tu mensaje. Intenta de nuevo.'
+
+// Laravel sends `errors: { campo: ['mensaje'] }`; show the text, never the array.
+const firstText = (value: unknown): string => {
+  if (Array.isArray(value)) return firstText(value[0])
+  return typeof value === 'string' ? value.trim() : ''
+}
+
+// ofetch's own message (`[POST] "https://…": 422 …`) is for logs, not for people.
+const humanText = (value: unknown) => {
+  const text = firstText(value)
+  return /^\[[A-Z]+\] /.test(text) ? '' : text
+}
+
+const messageFromError = (error: unknown) => {
+  if (typeof error === 'object' && error !== null) {
+    const responseError = error as {
+      data?: { error?: unknown; errors?: unknown; message?: unknown }
+      message?: string
+      statusMessage?: string
+    }
+    const data = typeof responseError.data === 'object' && responseError.data !== null
+      ? responseError.data
+      : {}
+
+    const fieldErrors = typeof data.errors === 'object' && data.errors !== null && !Array.isArray(data.errors)
+      ? Object.values(data.errors).map(firstText).filter(Boolean).join(' ')
+      : firstText(data.errors)
+
+    return fieldErrors
+      || humanText(data.message)
+      || humanText(data.error)
+      || humanText(responseError.statusMessage)
+      || humanText(responseError.message)
+      || fallbackErrorMessage
+  }
+
+  return fallbackErrorMessage
+}
 
 const submit = async (e: Event) => {
   e.preventDefault()
+  if (submitting.value) return
+
   submitting.value = true
-  await new Promise(r => setTimeout(r, 800))
-  submitting.value = false
-  success.value = true
-  setTimeout(() => {
-    success.value = false
-    form.value = { name: '', email: '', subject: '', message: '' }
-  }, 3500)
+  success.value = false
+  errorMessage.value = ''
+
+  try {
+    const captchaToken = await getToken('contact_submit')
+    await submitContact({ ...form.value }, captchaToken)
+    success.value = true
+    form.value = { name: '', email: '', subject: '', message: '', website: '' }
+    resetCaptcha()
+  } catch (error) {
+    errorMessage.value = messageFromError(error)
+  } finally {
+    submitting.value = false
+  }
 }
 </script>
 
@@ -40,8 +120,9 @@ const submit = async (e: Event) => {
         <form @submit="submit" class="lg:col-span-8 space-y-8 bg-ink-card border border-line rounded-3xl p-8 lg:p-12">
           <div class="grid sm:grid-cols-2 gap-8">
             <div>
-              <label class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Nombre</label>
+              <label for="contact-name" class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Nombre</label>
               <input
+                id="contact-name"
                 v-model="form.name"
                 type="text"
                 required
@@ -49,8 +130,9 @@ const submit = async (e: Event) => {
               />
             </div>
             <div>
-              <label class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Email</label>
+              <label for="contact-email" class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Email</label>
               <input
+                id="contact-email"
                 v-model="form.email"
                 type="email"
                 required
@@ -60,8 +142,9 @@ const submit = async (e: Event) => {
           </div>
 
           <div>
-            <label class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Asunto</label>
+            <label for="contact-subject" class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Asunto</label>
             <input
+              id="contact-subject"
               v-model="form.subject"
               type="text"
               required
@@ -70,8 +153,9 @@ const submit = async (e: Event) => {
           </div>
 
           <div>
-            <label class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Mensaje</label>
+            <label for="contact-message" class="block text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-3">Mensaje</label>
             <textarea
+              id="contact-message"
               v-model="form.message"
               required
               rows="6"
@@ -79,9 +163,39 @@ const submit = async (e: Event) => {
             />
           </div>
 
+          <div class="absolute -left-[10000px] h-px w-px overflow-hidden" aria-hidden="true">
+            <label for="contact-website">Sitio web</label>
+            <input
+              id="contact-website"
+              v-model="form.website"
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div
+            v-if="captchaEnabled"
+            class="overflow-x-auto"
+            aria-label="Verificación de seguridad"
+          >
+            <div ref="captchaContainer" />
+          </div>
+
+          <p
+            v-if="errorMessage"
+            id="contact-error"
+            role="alert"
+            class="rounded-xl border border-red-300/40 bg-red-950/30 px-4 py-3 text-sm text-red-100"
+          >
+            {{ errorMessage }}
+          </p>
+
           <button
             type="submit"
             :disabled="submitting"
+            :aria-describedby="errorMessage ? 'contact-error' : undefined"
             class="inline-flex items-center gap-3 px-8 py-4 bg-terra text-ink rounded-full font-medium tracking-wide hover:bg-cream transition-colors duration-500 shine-on-hover disabled:opacity-50"
           >
             <Send class="w-4 h-4" />
@@ -98,8 +212,27 @@ const submit = async (e: Event) => {
               <Mail class="w-4 h-4" />
               <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">Email</div>
             </div>
-            <a href="mailto:hola@vidaeneljardin.com" class="font-display text-cream text-2xl hover:text-terra transition-colors">
-              hola@vidaeneljardin.com
+            <a href="mailto:contacto@vidaeneljardin.com" class="font-display text-cream text-xl sm:text-2xl break-all hover:text-terra transition-colors">
+              contacto@vidaeneljardin.com
+            </a>
+          </div>
+
+          <div>
+            <div class="flex items-center gap-3 mb-3 text-terra">
+              <Phone class="w-4 h-4" />
+              <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">Teléfono</div>
+            </div>
+            <a href="tel:+526686088669" class="font-display text-cream text-2xl hover:text-terra transition-colors">
+              +52 668 608 8669
+            </a>
+            <a
+              href="https://wa.me/526686088669"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-3 inline-flex items-center gap-2 text-cream-60 hover:text-terra transition-colors"
+            >
+              <MessageCircle class="w-4 h-4" />
+              Escribir por WhatsApp
             </a>
           </div>
 
@@ -108,10 +241,7 @@ const submit = async (e: Event) => {
               <MapPin class="w-4 h-4" />
               <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase">Vivero</div>
             </div>
-            <p class="font-display text-cream text-2xl leading-tight">
-              Ciudad de México<br />
-              <span class="text-cream-60 text-base font-sans">Coyoacán · CDMX</span>
-            </p>
+            <p class="font-display text-cream text-2xl leading-tight">Tijuana, B.C.</p>
           </div>
 
           <div>

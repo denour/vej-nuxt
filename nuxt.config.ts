@@ -82,8 +82,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     // Private keys only available server-side
-    recaptchaSecret: process.env.RECAPTCHA_SECRET,
-    hcaptchaSecret: process.env.HCAPTCHA_SECRET,
+    turnstileSecret: process.env.TURNSTILE_SECRET,
     public: {
       // Site URL for SEO
       siteUrl: process.env.SITE_URL || 'https://vidaeneljardin.com',
@@ -93,8 +92,7 @@ export default defineNuxtConfig({
       storageBase: process.env.STORAGE_BASE || 'http://localhost',
       // Optional contact endpoint path (relative to apiBase)
       contactEndpoint: process.env.CONTACT_ENDPOINT || '/contact',
-      // Captcha provider and site key (client-side)
-      captchaProvider: process.env.CAPTCHA_PROVIDER || 'recaptcha',
+      // Optional Cloudflare Turnstile site key (client-side)
       captchaSiteKey: process.env.CAPTCHA_SITE_KEY || '',
       // Client-side periodic cache invalidation for Pinia stores (ms)
       cacheInvalidateMs: Number(process.env.CACHE_INVALIDATE_MS || 0)
