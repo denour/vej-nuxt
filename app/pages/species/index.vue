@@ -5,7 +5,7 @@ import SpeciesCard from "~/components/common/SpeciesCard.vue";
 import { useSpeciesStore } from "~~/stores/Species";
 
 useSeoMeta({
-  title: 'Especies — Vida en el Jardín',
+  title: 'Especies',
   description: 'Una colección curada de especies con fichas de cuidado, requisitos de luz y notas botánicas.',
   ogTitle: 'Especies — Vida en el Jardín',
   ogDescription: 'Colección botánica curada. Fichas de cuidado, luz, riego y carácter.',

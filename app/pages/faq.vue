@@ -5,7 +5,7 @@ import { useFaqStore } from '~~/stores/Faq'
 import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
-  title: 'Preguntas Frecuentes — Vida en el Jardín',
+  title: 'Preguntas Frecuentes',
   description: 'Respuestas rápidas a dudas comunes sobre pedidos, envíos, pagos y cuidado de plantas.',
 })
 

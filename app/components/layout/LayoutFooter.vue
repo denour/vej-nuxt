@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Instagram, Twitter, Youtube } from 'lucide-vue-next'
+import { Facebook } from 'lucide-vue-next'
 
+const storeEnabled = useRuntimeConfig().public.storeEnabled
 const year = new Date().getFullYear()
 
 const sections = [
@@ -10,7 +11,7 @@ const sections = [
       { name: 'Inicio', path: '/' },
       { name: 'Especies', path: '/species' },
       { name: 'Blog', path: '/blog' },
-      { name: 'Tienda', path: '/store' },
+      ...(storeEnabled ? [{ name: 'Tienda', path: '/store' }] : []),
     ],
   },
   {
@@ -42,13 +43,14 @@ const sections = [
 
         <div class="mt-10 flex items-center gap-4">
           <a
-            v-for="(social, i) in [
-              { icon: Instagram, label: 'Instagram' },
-              { icon: Twitter, label: 'Twitter' },
-              { icon: Youtube, label: 'YouTube' },
+            v-for="social in [
+              // ponytail: solo redes con URL real; agrega Instagram/YouTube cuando existan
+              { icon: Facebook, label: 'Facebook', href: 'https://www.facebook.com/105522835259763' },
             ]"
-            :key="i"
-            href="#"
+            :key="social.label"
+            :href="social.href"
+            target="_blank"
+            rel="noopener noreferrer"
             :aria-label="social.label"
             class="w-11 h-11 rounded-full border border-cream/20 flex items-center justify-center text-cream-60 hover:bg-terra hover:border-terra hover:text-ink transition-all duration-500"
           >
@@ -81,7 +83,7 @@ const sections = [
       <!-- Time / location -->
       <div class="lg:col-span-3">
         <div class="text-cream-40 text-[10px] tracking-[0.3em] uppercase mb-6">Desde</div>
-        <p class="text-cream/80 mb-3">Ciudad de México, MX</p>
+        <p class="text-cream/80 mb-3">Tijuana, B.C.</p>
         <p class="text-cream-60 text-sm">
           Lunes a viernes
           <br />
@@ -109,8 +111,8 @@ const sections = [
         © {{ year }} Vida en el Jardín · Todos los derechos reservados
       </p>
       <div class="flex items-center gap-6 text-cream-40 text-xs tracking-wide">
-        <NuxtLink to="/" class="hover:text-cream transition-colors">Privacidad</NuxtLink>
-        <NuxtLink to="/" class="hover:text-cream transition-colors">Términos</NuxtLink>
+        <NuxtLink to="/aviso-de-privacidad" class="hover:text-cream transition-colors">Privacidad</NuxtLink>
+        <NuxtLink to="/terminos" class="hover:text-cream transition-colors">Términos</NuxtLink>
       </div>
     </div>
 

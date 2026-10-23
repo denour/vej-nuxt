@@ -3,7 +3,7 @@ import { RotateCcw, Calendar, CheckCircle, AlertCircle } from 'lucide-vue-next'
 import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
-  title: 'Devoluciones — Vida en el Jardín',
+  title: 'Devoluciones',
   description: 'Política de devoluciones: 30 días, garantía de planta viva.',
 })
 

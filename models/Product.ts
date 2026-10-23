@@ -23,8 +23,8 @@ export interface Product {
     currency?: string;
 
     // Rating
-    rating: number;
-    reviews: number;
+    rating?: number;
+    reviews?: number;
 
     // Availability (7)
     inStock: boolean;

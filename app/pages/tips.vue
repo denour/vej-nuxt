@@ -5,7 +5,7 @@ import { usePostsStore } from '~~/stores/BlogPost'
 import PageHero from '~/components/common/PageHero.vue'
 
 useSeoMeta({
-  title: 'Consejos — Vida en el Jardín',
+  title: 'Consejos',
   description: 'Guías prácticas para resolver problemas comunes y mejorar el cuidado de tus plantas.',
 })
 
