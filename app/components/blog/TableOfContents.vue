@@ -65,7 +65,7 @@ watch(
   <div class="bg-white rounded-2xl shadow-md p-6 sticky top-24">
     <div class="flex items-center gap-2 mb-4">
       <List class="w-5 h-5 text-green-600" />
-      <h3 class="text-lg text-gray-800">Tabla de Contenidos</h3>
+      <h2 class="text-lg text-gray-800">Tabla de Contenidos</h2>
     </div>
 
     <nav>

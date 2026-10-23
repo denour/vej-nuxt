@@ -88,7 +88,12 @@ const handleSubscribe = async () => {
 
 
 <template>
-  <PostHeader v-if="sanitizedPost" v-bind="sanitizedPost" />
+  <main>
+  <PostHeader
+    v-if="sanitizedPost"
+    v-bind="sanitizedPost"
+    :url="`${$config.public.siteUrl || 'https://vidaeneljardin.com'}/blog/${slug}`"
+  />
   <section class="max-w-7xl mx-auto px-6 py-16">
     <div class="grid lg:grid-cols-4 gap-8">
       <div class="lg:col-span-1 order-2 lg:order-1">
@@ -150,4 +155,5 @@ const handleSubscribe = async () => {
       </div>
     </div>
   </section>
+  </main>
 </template>
