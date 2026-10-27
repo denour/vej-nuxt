@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import FaqPage from '~/pages/faq.vue'
+import { useFaqStore } from '~~/stores/Faq'
 
 const fetchFaqsMock = vi.fn()
 
@@ -10,6 +11,11 @@ vi.mock('~~/services/faqs', () => ({
 }))
 
 const categoryChips = ['Pedidos', 'Envíos', 'Pagos', 'Plantas']
+
+beforeEach(() => {
+  fetchFaqsMock.mockReset()
+  useFaqStore().$reset()
+})
 
 describe('faq page — sin preguntas', () => {
   it('does not render the category chips when the API returns no faqs', async () => {
