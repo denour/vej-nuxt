@@ -66,7 +66,7 @@ const toggle = (id: string) => {
     </PageHero>
 
     <!-- Categories -->
-    <section class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-12">
+    <section v-if="faqs.length > 0" class="px-6 lg:px-12 max-w-[1400px] mx-auto pb-12">
       <div class="flex flex-wrap gap-2">
         <button
           v-for="c in categories"
